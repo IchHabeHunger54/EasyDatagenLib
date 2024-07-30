@@ -4,6 +4,7 @@ import com.github.minecraftschurlimods.easydatagenlib.util.JsonSerializable;
 import com.github.minecraftschurlimods.easydatagenlib.util.JsonUtil;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.crafting.Ingredient;
 
 public class IngredientWithCount implements JsonSerializable {
@@ -20,12 +21,12 @@ public class IngredientWithCount implements JsonSerializable {
     }
 
     @Override
-    public JsonElement toJson() {
+    public JsonElement toJson(HolderLookup.Provider registries) {
         JsonObject json = new JsonObject();
         if (count == 1) {
-            json = JsonUtil.toJson(ingredient).getAsJsonObject();
+            json = JsonUtil.toJson(ingredient, registries).getAsJsonObject();
         } else {
-            json.add("base_ingredient", JsonUtil.toJson(ingredient));
+            json.add("base_ingredient", JsonUtil.toJson(ingredient, registries));
             json.addProperty("count", count);
         }
         return json;
@@ -45,8 +46,8 @@ public class IngredientWithCount implements JsonSerializable {
         }
 
         @Override
-        public JsonElement toJson() {
-            JsonObject json = super.toJson().getAsJsonObject();
+        public JsonElement toJson(HolderLookup.Provider registries) {
+            JsonObject json = super.toJson(registries).getAsJsonObject();
             json.addProperty("chance", chance);
             return json;
         }

@@ -1,6 +1,7 @@
 plugins {
     idea
-    id ("com.github.minecraftschurlimods.helperplugin")
+    id("net.neoforged.gradle.userdev")
+    id("com.github.minecraftschurlimods.helperplugin")
 }
 
 helper.withApiSourceSet()

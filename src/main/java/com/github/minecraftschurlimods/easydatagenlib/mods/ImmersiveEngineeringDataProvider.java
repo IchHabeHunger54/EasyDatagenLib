@@ -8,6 +8,7 @@ import com.github.minecraftschurlimods.easydatagenlib.util.immersiveengineering.
 import com.github.minecraftschurlimods.easydatagenlib.util.immersiveengineering.IngredientWithCount;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -16,16 +17,17 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
-    protected ImmersiveEngineeringDataProvider(String folder, String namespace, PackOutput output) {
-        super(new ResourceLocation("immersiveengineering", folder), namespace, output);
+    protected ImmersiveEngineeringDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(new ResourceLocation("immersiveengineering", folder), namespace, output, registries);
     }
     //TODO Alloy Furnace, Blast Furnace, Blast Furnace Fuel, Bottling Machine, Cloche Fertilizer, Coke Oven, Fermenter, Generator Fuel, Metal Press, Mineral Mix, Mixer, Refinery, Squeezer, Thermoelectric Source
 
     public static class ArcFurnace extends ImmersiveEngineeringDataProvider<ArcFurnace.Builder> {
-        public ArcFurnace(String namespace, PackOutput output) {
-            super("arc_furnace", namespace, output);
+        public ArcFurnace(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("arc_furnace", namespace, output, registries);
         }
 
         /**
@@ -171,28 +173,28 @@ public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeB
             }
 
             @Override
-            protected void toJson(JsonObject json) {
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
                 json.addProperty("time", duration);
                 json.addProperty("energy", energy);
-                json.add("input", input.toJson());
+                json.add("input", input.toJson(registries));
                 if (slag != null) {
-                    json.add("slag", slag.toJson());
+                    json.add("slag", slag.toJson(registries));
                 }
                 if (outputs.isEmpty()) throw new IllegalStateException("Results cannot be empty for recipe" + id + "!");
-                json.add("results", JsonUtil.toList(outputs));
+                json.add("results", JsonUtil.toList(outputs, registries));
                 if (!secondaryInputs.isEmpty()) {
-                    json.add("additives", JsonUtil.toList(secondaryInputs));
+                    json.add("additives", JsonUtil.toList(secondaryInputs, registries));
                 }
                 if (!secondaryOutputs.isEmpty()) {
-                    json.add("secondaries", JsonUtil.toList(secondaryOutputs));
+                    json.add("secondaries", JsonUtil.toList(secondaryOutputs, registries));
                 }
             }
         }
     }
 
     public static class Cloche extends ImmersiveEngineeringDataProvider<Cloche.Builder> {
-        public Cloche(String namespace, PackOutput output) {
-            super("cloche", namespace, output);
+        public Cloche(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("cloche", namespace, output, registries);
         }
 
         /**
@@ -261,11 +263,11 @@ public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeB
             }
 
             @Override
-            protected void toJson(JsonObject json) {
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
                 json.addProperty("time", time);
-                json.add("input", JsonUtil.toJson(input));
-                json.add("soil", JsonUtil.toJson(soil));
-                json.add("results", JsonUtil.toList(outputs));
+                json.add("input", JsonUtil.toJson(input, registries));
+                json.add("soil", JsonUtil.toJson(soil, registries));
+                json.add("results", JsonUtil.toList(outputs, registries));
                 JsonObject render = new JsonObject();
                 render.addProperty("type", renderType.toString());
                 render.addProperty("block", block.toString());
@@ -275,8 +277,8 @@ public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeB
     }
 
     public static class Crusher extends ImmersiveEngineeringDataProvider<Crusher.Builder> {
-        public Crusher(String namespace, PackOutput output) {
-            super("crusher", namespace, output);
+        public Crusher(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("crusher", namespace, output, registries);
         }
 
         /**
@@ -359,18 +361,18 @@ public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeB
             }
 
             @Override
-            protected void toJson(JsonObject json) {
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
                 json.addProperty("energy", energy);
-                json.add("input", JsonUtil.toJson(input));
-                json.add("result", output.toJson());
-                json.add("secondaries", JsonUtil.toList(secondaryOutputs));
+                json.add("input", JsonUtil.toJson(input, registries));
+                json.add("result", output.toJson(registries));
+                json.add("secondaries", JsonUtil.toList(secondaryOutputs, registries));
             }
         }
     }
 
     public static class Sawmill extends ImmersiveEngineeringDataProvider<Sawmill.Builder> {
-        public Sawmill(String namespace, PackOutput output) {
-            super("sawmill", namespace, output);
+        public Sawmill(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("sawmill", namespace, output, registries);
         }
 
         /**
@@ -484,16 +486,16 @@ public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeB
             }
 
             @Override
-            protected void toJson(JsonObject json) {
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
                 json.addProperty("energy", energy);
-                json.add("input", JsonUtil.toJson(input));
-                json.add("result", output.toJson());
+                json.add("input", JsonUtil.toJson(input, registries));
+                json.add("result", output.toJson(registries));
                 if (stripped != null) {
-                    json.add("stripped", stripped.toJson());
+                    json.add("stripped", stripped.toJson(registries));
                 }
                 json.add("secondaries", JsonUtil.toList(secondaryOutputs, e -> {
                     JsonObject o = new JsonObject();
-                    o.add("output", e.getFirst().toJson());
+                    o.add("output", e.getFirst().toJson(registries));
                     o.addProperty("stripping", e.getSecond());
                     return o;
                 }));

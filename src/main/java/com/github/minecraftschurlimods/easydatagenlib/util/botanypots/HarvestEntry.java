@@ -4,6 +4,7 @@ import com.github.minecraftschurlimods.easydatagenlib.util.JsonSerializable;
 import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItemStack;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 
 public class HarvestEntry implements JsonSerializable {
@@ -20,8 +21,8 @@ public class HarvestEntry implements JsonSerializable {
     }
 
     @Override
-    public JsonElement toJson() {
-        JsonObject json = stack.toJson();
+    public JsonElement toJson(HolderLookup.Provider registries) {
+        JsonObject json = stack.toJson(registries);
         if (minRolls != 1 && maxRolls != 1) {
             json.addProperty("minRolls", minRolls);
             json.addProperty("maxRolls", maxRolls);

@@ -6,33 +6,36 @@ import com.github.minecraftschurlimods.easydatagenlib.util.JsonSerializable;
 import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItemStack;
 import com.github.minecraftschurlimods.easydatagenlib.util.mekanism.*;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 
+import java.util.concurrent.CompletableFuture;
+
 public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
-    protected MekanismDataProvider(String folder, String namespace, PackOutput output) {
-        super(new ResourceLocation("mekanism", folder), namespace, output);
+    protected MekanismDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(new ResourceLocation("mekanism", folder), namespace, output, registries);
     }
     //TODO Chemical Infusing, Compressing, Crystallizing, Dissolution, Energy Conversion, Evaporating, Injecting, Metallurgic Infusing, Nucleosynthesizing, Painting, Pigment Mixing, Purifying, Reaction, Rotary, Separating, Washing
 
     public static class Activating extends GasToGasRecipe {
-        public Activating(String namespace, PackOutput output) {
-            super("activating", namespace, output);
+        public Activating(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("activating", namespace, output, registries);
         }
     }
 
     public static class Centrifuging extends GasToGasRecipe {
-        public Centrifuging(String namespace, PackOutput output) {
-            super("centrifuging", namespace, output);
+        public Centrifuging(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("centrifuging", namespace, output, registries);
         }
     }
 
     public static class Combining extends IngredientToItemRecipe {
-        public Combining(String namespace, PackOutput output) {
-            super("combining", namespace, output);
+        public Combining(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("combining", namespace, output, registries);
         }
 
         /**
@@ -435,53 +438,53 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
             }
 
             @Override
-            protected void toJson(JsonObject json) {
-                json.add("mainInput", input.toJson());
-                json.add("extraInput", extraInput.toJson());
-                json.add("output", output.toJson());
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
+                json.add("mainInput", input.toJson(registries));
+                json.add("extraInput", extraInput.toJson(registries));
+                json.add("output", output.toJson(registries));
             }
         }
     }
 
     public static class Crushing extends IngredientToItemRecipe {
-        public Crushing(String namespace, PackOutput output) {
-            super("crushing", namespace, output);
+        public Crushing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("crushing", namespace, output, registries);
         }
     }
 
     public static class Enriching extends IngredientToItemRecipe {
-        public Enriching(String namespace, PackOutput output) {
-            super("enriching", namespace, output);
+        public Enriching(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("enriching", namespace, output, registries);
         }
     }
 
     public static class GasConversion extends IngredientToTRecipe<Chemical.Stack<Gas>> {
-        public GasConversion(String namespace, PackOutput output) {
-            super("gas_conversion", namespace, output);
+        public GasConversion(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("gas_conversion", namespace, output, registries);
         }
     }
 
     public static class InfusionConversion extends IngredientToTRecipe<Chemical.Stack<InfuseType>> {
-        public InfusionConversion(String namespace, PackOutput output) {
-            super("infusion_conversion", namespace, output);
+        public InfusionConversion(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("infusion_conversion", namespace, output, registries);
         }
     }
 
     public static class Oxidizing extends IngredientToTRecipe<Chemical.Stack<Gas>> {
-        public Oxidizing(String namespace, PackOutput output) {
-            super("oxidizing", namespace, output);
+        public Oxidizing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("oxidizing", namespace, output, registries);
         }
     }
 
     public static class PigmentExtracting extends IngredientToTRecipe<Chemical.Stack<Pigment>> {
-        public PigmentExtracting(String namespace, PackOutput output) {
-            super("pigment_extracting", namespace, output);
+        public PigmentExtracting(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("pigment_extracting", namespace, output, registries);
         }
     }
 
     public static class Sawing extends IngredientToItemRecipe {
-        public Sawing(String namespace, PackOutput output) {
-            super("sawing", namespace, output);
+        public Sawing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("sawing", namespace, output, registries);
         }
 
         /**
@@ -791,11 +794,11 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
             }
 
             @Override
-            protected void toJson(JsonObject json) {
-                json.add("input", input.toJson());
-                json.add("mainOutput", output.toJson());
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
+                json.add("input", input.toJson(registries));
+                json.add("mainOutput", output.toJson(registries));
                 if (secondaryOutput != null && chance > 0 && chance <= 1) {
-                    json.add("secondaryOutput", secondaryOutput.toJson());
+                    json.add("secondaryOutput", secondaryOutput.toJson(registries));
                     json.addProperty("secondaryChance", chance);
                 }
             }
@@ -803,14 +806,14 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
     }
 
     public static class Smelting extends IngredientToItemRecipe {
-        public Smelting(String namespace, PackOutput output) {
-            super("smelting", namespace, output);
+        public Smelting(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("smelting", namespace, output, registries);
         }
     }
 
     public static abstract class Abstract1To1Recipe<I extends JsonSerializable, O extends JsonSerializable, B extends Abstract1To1Recipe.Builder<I, O>> extends MekanismDataProvider<B> {
-        protected Abstract1To1Recipe(String folder, String namespace, PackOutput output) {
-            super(folder, namespace, output);
+        protected Abstract1To1Recipe(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super(folder, namespace, output, registries);
         }
 
         public static class Builder<I extends JsonSerializable, O extends JsonSerializable> extends AbstractRecipeBuilder<Builder<I, O>> {
@@ -824,16 +827,16 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
             }
 
             @Override
-            protected void toJson(JsonObject json) {
-                json.add("input", input.toJson());
-                json.add("output", output.toJson());
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
+                json.add("input", input.toJson(registries));
+                json.add("output", output.toJson(registries));
             }
         }
     }
 
     public static abstract class IngredientToTRecipe<T extends JsonSerializable> extends Abstract1To1Recipe<IngredientWithAmount, T, IngredientToTRecipe.Builder<T>> {
-        protected IngredientToTRecipe(String folder, String namespace, PackOutput output) {
-            super(folder, namespace, output);
+        protected IngredientToTRecipe(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super(folder, namespace, output, registries);
         }
 
         /**
@@ -867,8 +870,8 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
     }
 
     public static abstract class TToItemRecipe<T extends JsonSerializable> extends Abstract1To1Recipe<T, PotentiallyAbsentItemStack, TToItemRecipe.Builder<T>> {
-        protected TToItemRecipe(String folder, String namespace, PackOutput output) {
-            super(folder, namespace, output);
+        protected TToItemRecipe(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super(folder, namespace, output, registries);
         }
 
         /**
@@ -959,8 +962,8 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
     }
 
     public static abstract class IngredientToItemRecipe extends Abstract1To1Recipe<IngredientWithAmount, PotentiallyAbsentItemStack, IngredientToItemRecipe.Builder> {
-        protected IngredientToItemRecipe(String folder, String namespace, PackOutput output) {
-            super(folder, namespace, output);
+        protected IngredientToItemRecipe(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super(folder, namespace, output, registries);
         }
 
         /**
@@ -1141,8 +1144,8 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
     }
 
     public static abstract class GasToGasRecipe extends Abstract1To1Recipe<Chemical.Stack<Gas>, Chemical.Stack<Gas>, GasToGasRecipe.Builder> {
-        protected GasToGasRecipe(String folder, String namespace, PackOutput output) {
-            super(folder, namespace, output);
+        protected GasToGasRecipe(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super(folder, namespace, output, registries);
         }
 
         /**

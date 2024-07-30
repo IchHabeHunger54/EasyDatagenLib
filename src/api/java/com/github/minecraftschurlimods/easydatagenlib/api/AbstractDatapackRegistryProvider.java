@@ -4,7 +4,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -17,7 +17,7 @@ import java.util.Optional;
 public abstract class AbstractDatapackRegistryProvider<T> {
     public final ResourceKey<? extends Registry<T>> registryKey;
     public final String namespace;
-    private BootstapContext<T> bootstapContext;
+    private BootstrapContext<T> bootstrapContext;
 
     /**
      * @param registryKey The {@link ResourceKey} to use.
@@ -129,8 +129,8 @@ public abstract class AbstractDatapackRegistryProvider<T> {
      * @return The {@link HolderGetter} for the registry of the given {@link ResourceKey}.
      */
     protected final <S> HolderGetter<S> getLookup(ResourceKey<? extends Registry<S>> registryKey) {
-        if (bootstapContext == null) throw new IllegalStateException("Cannot get lookup before generate()");
-        return bootstapContext.lookup(registryKey);
+        if (bootstrapContext == null) throw new IllegalStateException("Cannot get lookup before generate()");
+        return bootstrapContext.lookup(registryKey);
     }
 
     /**
@@ -150,12 +150,12 @@ public abstract class AbstractDatapackRegistryProvider<T> {
      * @param value The value.
      */
     protected final void add(ResourceLocation id, T value) {
-        if (bootstapContext == null) throw new IllegalStateException("Cannot add before generate()");
-        bootstapContext.register(ResourceKey.create(registryKey, id), value);
+        if (bootstrapContext == null) throw new IllegalStateException("Cannot add before generate()");
+        bootstrapContext.register(ResourceKey.create(registryKey, id), value);
     }
 
-    void run(BootstapContext<T> bootstapContext) {
-        this.bootstapContext = bootstapContext;
+    void run(BootstrapContext<T> bootstrapContext) {
+        this.bootstrapContext = bootstrapContext;
         generate();
     }
 }

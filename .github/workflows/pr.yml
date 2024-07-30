@@ -11,3 +11,5 @@ on:
 jobs:
   build:
     uses: MinecraftschurliMods/.github/.github/workflows/build-library.yml@main
+    with:
+      java-version: 21

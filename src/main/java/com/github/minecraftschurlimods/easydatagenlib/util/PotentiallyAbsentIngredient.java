@@ -4,24 +4,27 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.crafting.ICustomIngredient;
+import net.neoforged.neoforge.common.crafting.IngredientType;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 /**
  * Class that allows mimicking an ingredient of an item that is not present during compile time by simply using the item's registry name.
  * This should not be used outside datagen, as there is no validation whatsoever!
  */
-public class PotentiallyAbsentIngredient extends Ingredient {
+public class PotentiallyAbsentIngredient implements ICustomIngredient {
     private final ResourceLocation[] items;
 
     protected PotentiallyAbsentIngredient(ResourceLocation... items) {
-        super(Stream.of());
         this.items = items;
     }
 
-    public static PotentiallyAbsentIngredient of(ResourceLocation... items) {
-        return new PotentiallyAbsentIngredient(items);
+    public static Ingredient of(ResourceLocation... items) {
+        return new Ingredient(new PotentiallyAbsentIngredient(items));
     }
 
     public JsonElement toJson() {
@@ -38,5 +41,25 @@ public class PotentiallyAbsentIngredient extends Ingredient {
             }
             return array;
         }
+    }
+
+    @Override
+    public boolean test(ItemStack stack) {
+        return Arrays.stream(items).anyMatch(stack.getItemHolder()::is);
+    }
+
+    @Override
+    public Stream<ItemStack> getItems() {
+        return Stream.empty();
+    }
+
+    @Override
+    public boolean isSimple() {
+        return false;
+    }
+
+    @Override
+    public IngredientType<?> getType() {
+        return null;
     }
 }

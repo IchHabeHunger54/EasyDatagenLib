@@ -86,7 +86,7 @@ public abstract class EntryBuilder<B extends BookBuilder<B, C, E>, C extends Cat
             JsonObject mappings = new JsonObject();
 
             for (final Entry<ItemStack, Integer> entry : this.extraRecipeMappings.entrySet()) {
-                mappings.addProperty(Util.serializeStack(entry.getKey()), entry.getValue());
+                mappings.addProperty(Util.serializeStack(entry.getKey(), this.getParent().getBookBuilder().getRegistries()), entry.getValue());
             }
 
             json.add("extra_recipe_mappings", mappings);
@@ -319,5 +319,9 @@ public abstract class EntryBuilder<B extends BookBuilder<B, C, E>, C extends Cat
 
     public ResourceLocation getId() {
         return this.id;
+    }
+
+    public C getParent() {
+        return this.parent;
     }
 }

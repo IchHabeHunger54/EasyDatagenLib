@@ -4,6 +4,7 @@ import com.github.minecraftschurlimods.easydatagenlib.util.JsonSerializable;
 import com.github.minecraftschurlimods.easydatagenlib.util.JsonUtil;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -44,7 +45,7 @@ public abstract class DisplayState implements JsonSerializable {
         }
 
         @Override
-        public JsonElement toJson() {
+        public JsonElement toJson(HolderLookup.Provider registries) {
             JsonObject json = new JsonObject();
             json.addProperty("type", id.toString());
             json.addProperty("block", block.toString());
@@ -105,7 +106,7 @@ public abstract class DisplayState implements JsonSerializable {
         }
 
         @Override
-        public JsonElement toJson() {
+        public JsonElement toJson(HolderLookup.Provider registries) {
             JsonObject json = JsonUtil.toJson(state);
             if (scale != null) {
                 json.add("scale", JsonUtil.toJson(scale));
@@ -141,10 +142,10 @@ public abstract class DisplayState implements JsonSerializable {
         }
 
         @Override
-        public JsonElement toJson() {
+        public JsonElement toJson(HolderLookup.Provider registries) {
             JsonObject json = new JsonObject();
             json.addProperty("type", id.toString());
-            json.add("phases", JsonUtil.toList(phases));
+            json.add("phases", JsonUtil.toList(phases, registries));
             return json;
         }
     }

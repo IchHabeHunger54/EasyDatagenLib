@@ -1,6 +1,7 @@
 package com.github.minecraftschurlimods.easydatagenlib.api;
 
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -26,34 +27,38 @@ public abstract class AbstractDataProvider<T extends AbstractDataBuilder<?>> imp
     protected final String namespace;
     protected final PackOutput.PathProvider pathProvider;
     protected final List<T> values = new ArrayList<>();
+    private final CompletableFuture<HolderLookup.Provider> registries;
 
     /**
      * @param output    The pack output to use.
      * @param namespace The namespace to use.
      * @param folder    The folder to output to.
      */
-    protected AbstractDataProvider(String namespace, String folder, PackOutput.Target target, PackOutput output) {
-        this(namespace, output.createPathProvider(target, folder));
+    protected AbstractDataProvider(String namespace, String folder, PackOutput.Target target, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        this(namespace, output.createPathProvider(target, folder), registries);
     }
 
     /**
      * @param namespace    The namespace to use.
      * @param pathProvider The provider for the output file paths.
      */
-    protected AbstractDataProvider(String namespace, PackOutput.PathProvider pathProvider) {
+    protected AbstractDataProvider(String namespace, PackOutput.PathProvider pathProvider, CompletableFuture<HolderLookup.Provider> registries) {
         this.namespace = namespace;
         this.pathProvider = pathProvider;
+        this.registries = registries;
     }
 
     @Override
     public CompletableFuture<?> run(CachedOutput output) {
-        Set<ResourceLocation> ids = new HashSet<>();
-        List<CompletableFuture<?>> list = new ArrayList<>();
-        values.forEach(o -> {
-            if (!ids.add(o.id)) throw new IllegalStateException("Duplicate datagenned object " + o.id);
-            list.add(DataProvider.saveStable(output, toJson(o), pathProvider.json(o.id)));
+        return this.registries.thenCompose(registries -> {
+            Set<ResourceLocation> ids = new HashSet<>();
+            List<CompletableFuture<?>> list = new ArrayList<>();
+            values.forEach(o -> {
+                if (!ids.add(o.id)) throw new IllegalStateException("Duplicate datagenned object " + o.id);
+                list.add(DataProvider.saveStable(output, toJson(o, registries), pathProvider.json(o.id)));
+            });
+            return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));
         });
-        return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));
     }
 
     /**
@@ -86,9 +91,9 @@ public abstract class AbstractDataProvider<T extends AbstractDataBuilder<?>> imp
      * @param builder The builder to construct the {@link JsonObject} from.
      * @return A {@link JsonObject}, constructed from the given builder.
      */
-    protected JsonObject toJson(T builder) {
+    protected JsonObject toJson(T builder, HolderLookup.Provider registries) {
         JsonObject json = new JsonObject();
-        builder.toJson(json);
+        builder.toJson(json, registries);
         return json;
     }
 

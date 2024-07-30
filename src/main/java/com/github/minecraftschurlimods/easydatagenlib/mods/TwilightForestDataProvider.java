@@ -3,6 +3,7 @@ package com.github.minecraftschurlimods.easydatagenlib.mods;
 import com.github.minecraftschurlimods.easydatagenlib.api.AbstractRecipeBuilder;
 import com.github.minecraftschurlimods.easydatagenlib.api.AbstractRecipeProvider;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -10,15 +11,16 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class TwilightForestDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
-    protected TwilightForestDataProvider(String folder, String namespace, PackOutput output) {
-        super(new ResourceLocation("twilightforest", folder), namespace, output);
+    protected TwilightForestDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(new ResourceLocation("twilightforest", folder), namespace, output, registries);
     }
 
     public static class Crumbling extends TwilightForestDataProvider<Crumbling.Builder> {
-        public Crumbling(String namespace, PackOutput output) {
-            super("crumble_horn", namespace, output);
+        public Crumbling(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("crumble_horn", namespace, output, registries);
         }
 
         /**
@@ -80,7 +82,7 @@ public abstract class TwilightForestDataProvider<T extends AbstractRecipeBuilder
             }
 
             @Override
-            protected void toJson(JsonObject json) {
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
                 json.addProperty("from", from.toString());
                 json.addProperty("to", to.toString());
             }
@@ -88,8 +90,8 @@ public abstract class TwilightForestDataProvider<T extends AbstractRecipeBuilder
     }
 
     public static class Transforming extends TwilightForestDataProvider<Transforming.Builder> {
-        public Transforming(String namespace, PackOutput output) {
-            super("transformation_powder", namespace, output);
+        public Transforming(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("transformation_powder", namespace, output, registries);
         }
 
         /**
@@ -157,7 +159,7 @@ public abstract class TwilightForestDataProvider<T extends AbstractRecipeBuilder
             }
 
             @Override
-            protected void toJson(JsonObject json) {
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
                 json.addProperty("reversible", reversible);
                 json.addProperty("from", from.toString());
                 json.addProperty("to", to.toString());

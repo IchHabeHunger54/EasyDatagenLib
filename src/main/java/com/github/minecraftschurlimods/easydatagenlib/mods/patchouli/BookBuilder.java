@@ -1,6 +1,7 @@
 package com.github.minecraftschurlimods.easydatagenlib.mods.patchouli;
 
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -15,6 +16,7 @@ import java.util.function.Consumer;
 public abstract class BookBuilder<B extends BookBuilder<B, C, E>, C extends CategoryBuilder<B, C, E>, E extends EntryBuilder<B, C, E>> {
     private final List<C> categories = new ArrayList<>();
     protected final PatchouliBookProvider provider;
+    private final HolderLookup.Provider registries;
     private final ResourceLocation id;
     protected String name;
     protected String landingText;
@@ -43,11 +45,12 @@ public abstract class BookBuilder<B extends BookBuilder<B, C, E>, C extends Cate
     private Boolean showToasts;
     private Boolean i18n;
 
-    protected BookBuilder(ResourceLocation id, String name, String landingText, PatchouliBookProvider provider) {
+    protected BookBuilder(ResourceLocation id, String name, String landingText, PatchouliBookProvider provider, HolderLookup.Provider registries) {
         this.id = id;
         this.provider = provider;
         this.name = name;
         this.landingText = landingText;
+        this.registries = registries;
     }
 
     public String getLocale() {
@@ -265,7 +268,7 @@ public abstract class BookBuilder<B extends BookBuilder<B, C, E>, C extends Cate
     }
 
     public B setIndexIcon(ItemStack indexIcon) {
-        this.indexIcon = Util.serializeStack(indexIcon);
+        this.indexIcon = Util.serializeStack(indexIcon, this.registries);
         return this.self();
     }
 
@@ -290,7 +293,7 @@ public abstract class BookBuilder<B extends BookBuilder<B, C, E>, C extends Cate
     }
 
     public B setCustomBookItem(ItemStack customBookItem) {
-        this.customBookItem = Util.serializeStack(customBookItem);
+        this.customBookItem = Util.serializeStack(customBookItem, this.registries);
         return this.self();
     }
 
@@ -334,5 +337,9 @@ public abstract class BookBuilder<B extends BookBuilder<B, C, E>, C extends Cate
 
     public boolean equals(Object obj) {
         return obj instanceof BookBuilder && Objects.equals(((BookBuilder)obj).getId(), this.getId());
+    }
+
+    public HolderLookup.Provider getRegistries() {
+        return this.registries;
     }
 }

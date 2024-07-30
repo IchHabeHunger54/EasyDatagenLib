@@ -6,6 +6,7 @@ import com.github.minecraftschurlimods.easydatagenlib.util.JsonUtil;
 import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItemStack;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -13,15 +14,16 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class ArsNouveauDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
-    protected ArsNouveauDataProvider(String folder, String namespace, PackOutput output) {
-        super(new ResourceLocation("ars_nouveau", folder), namespace, output);
+    protected ArsNouveauDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(new ResourceLocation("ars_nouveau", folder), namespace, output, registries);
     }
 
     public static class Crushing extends ArsNouveauDataProvider<Crushing.Builder> {
-        public Crushing(String namespace, PackOutput output) {
-            super("crush", namespace, output);
+        public Crushing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("crush", namespace, output, registries);
         }
 
         /**
@@ -136,10 +138,10 @@ public abstract class ArsNouveauDataProvider<T extends AbstractRecipeBuilder<?>>
             }
 
             @Override
-            protected void toJson(JsonObject json) {
-                json.add("input", JsonUtil.toJson(input));
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
+                json.add("input", JsonUtil.toJson(input, registries));
                 json.add("output", JsonUtil.toList(output, e -> {
-                    JsonObject o = e.getFirst().toJson();
+                    JsonObject o = e.getFirst().toJson(registries);
                     if (!o.has("chance")) {
                         o.addProperty("chance", 1f);
                     }
@@ -152,8 +154,8 @@ public abstract class ArsNouveauDataProvider<T extends AbstractRecipeBuilder<?>>
     }
 
     public static class Glyph extends ArsNouveauDataProvider<Glyph.Builder> {
-        public Glyph(String namespace, PackOutput output) {
-            super("glyph", namespace, output);
+        public Glyph(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("glyph", namespace, output, registries);
         }
 
         /**
@@ -233,20 +235,20 @@ public abstract class ArsNouveauDataProvider<T extends AbstractRecipeBuilder<?>>
             }
 
             @Override
-            protected void toJson(JsonObject json) {
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
                 if (this.inputItems.isEmpty())
                     throw new IllegalStateException("Input item list is empty for recipe " + id);
                 json.addProperty("output", output.item.toString());
                 json.addProperty("count", output.count);
                 json.addProperty("exp", experience);
-                json.add("inputItems", JsonUtil.toIngredientList(inputItems));
+                json.add("inputItems", JsonUtil.toIngredientList(inputItems, registries));
             }
         }
     }
 
     public static class Imbueing extends ArsNouveauDataProvider<Imbueing.Builder> {
-        public Imbueing(String namespace, PackOutput output) {
-            super("imbuement", namespace, output);
+        public Imbueing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("imbuement", namespace, output, registries);
         }
 
         /**
@@ -327,12 +329,12 @@ public abstract class ArsNouveauDataProvider<T extends AbstractRecipeBuilder<?>>
             }
 
             @Override
-            protected void toJson(JsonObject json) {
-                json.add("input", JsonUtil.toJson(input));
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
+                json.add("input", JsonUtil.toJson(input, registries));
                 json.addProperty("output", output.item.toString());
                 json.addProperty("count", output.count);
                 json.addProperty("source", mana);
-                json.add("pedestalItems", JsonUtil.toIngredientList(secondaryInputs));
+                json.add("pedestalItems", JsonUtil.toIngredientList(secondaryInputs, registries));
             }
         }
     }

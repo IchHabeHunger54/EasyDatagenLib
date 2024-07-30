@@ -9,6 +9,7 @@ import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItem
 import com.github.minecraftschurlimods.easydatagenlib.util.create.HeatRequirement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -18,63 +19,64 @@ import net.minecraft.world.level.material.Fluid;
 import org.apache.commons.lang3.SerializationException;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
-    protected CreateDataProvider(String folder, String namespace, PackOutput output) {
-        super(new ResourceLocation("create", folder), namespace, output);
+    protected CreateDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(new ResourceLocation("create", folder), namespace, output, registries);
     }
 
     public static class Compacting extends Processing {
-        public Compacting(String namespace, PackOutput output) {
-            super("compacting", namespace, output);
+        public Compacting(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("compacting", namespace, output, registries);
         }
     }
 
     public static class Crushing extends Processing {
-        public Crushing(String namespace, PackOutput output) {
-            super("crushing", namespace, output);
+        public Crushing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("crushing", namespace, output, registries);
         }
     }
 
     public static class Cutting extends Processing {
-        public Cutting(String namespace, PackOutput output) {
-            super("cutting", namespace, output);
+        public Cutting(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("cutting", namespace, output, registries);
         }
     }
 
     public static class Deploying extends Processing {
-        public Deploying(String namespace, PackOutput output) {
-            super("deploying", namespace, output);
+        public Deploying(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("deploying", namespace, output, registries);
         }
     }
 
     public static class Emptying extends Processing {
-        public Emptying(String namespace, PackOutput output) {
-            super("emptying", namespace, output);
+        public Emptying(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("emptying", namespace, output, registries);
         }
     }
 
     public static class Filling extends Processing {
-        public Filling(String namespace, PackOutput output) {
-            super("filling", namespace, output);
+        public Filling(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("filling", namespace, output, registries);
         }
     }
 
     public static class Haunting extends Processing {
-        public Haunting(String namespace, PackOutput output) {
-            super("haunting", namespace, output);
+        public Haunting(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("haunting", namespace, output, registries);
         }
     }
 
     public static class ItemApplication extends Processing {
-        public ItemApplication(String namespace, PackOutput output) {
-            super("item_application", namespace, output);
+        public ItemApplication(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("item_application", namespace, output, registries);
         }
     }
 
     public static class MechanicalCrafting extends CreateDataProvider<MechanicalCrafting.Builder> {
-        public MechanicalCrafting(String namespace, PackOutput output) {
-            super("mechanical_crafting", namespace, output);
+        public MechanicalCrafting(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("mechanical_crafting", namespace, output, registries);
         }
 
         /**
@@ -192,15 +194,15 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
             }
 
             @Override
-            protected void toJson(JsonObject json) {
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
                 validate();
                 json.add("pattern", JsonUtil.toStringList(pattern));
                 JsonObject key = new JsonObject();
                 for (Map.Entry<Character, Ingredient> s : this.key.entrySet()) {
-                    json.add(String.valueOf(s.getKey()), JsonUtil.toJson(s.getValue()));
+                    json.add(String.valueOf(s.getKey()), JsonUtil.toJson(s.getValue(), registries));
                 }
                 json.add("key", key);
-                json.add("result", output.toJson());
+                json.add("result", output.toJson(registries));
                 json.addProperty("acceptMirrored", acceptMirrored);
             }
 
@@ -223,32 +225,32 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
     }
 
     public static class Milling extends Processing {
-        public Milling(String namespace, PackOutput output) {
-            super("milling", namespace, output);
+        public Milling(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("milling", namespace, output, registries);
         }
     }
 
     public static class Mixing extends Processing {
-        public Mixing(String namespace, PackOutput output) {
-            super("mixing", namespace, output);
+        public Mixing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("mixing", namespace, output, registries);
         }
     }
 
     public static class Pressing extends Processing {
-        public Pressing(String namespace, PackOutput output) {
-            super("pressing", namespace, output);
+        public Pressing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("pressing", namespace, output, registries);
         }
     }
 
     public static class SandpaperPolishing extends Processing {
-        public SandpaperPolishing(String namespace, PackOutput output) {
-            super("sandpaper_polishing", namespace, output);
+        public SandpaperPolishing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("sandpaper_polishing", namespace, output, registries);
         }
     }
 
     public static class SequencedAssembly extends CreateDataProvider<SequencedAssembly.Builder> {
-        public SequencedAssembly(String namespace, PackOutput output) {
-            super("sequenced_assembly", namespace, output);
+        public SequencedAssembly(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("sequenced_assembly", namespace, output, registries);
         }
 
         /**
@@ -330,13 +332,13 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
             }
 
             @Override
-            protected void toJson(JsonObject json) {
-                json.add("ingredient", JsonUtil.toJson(input));
-                json.add("transitionalItem", transitionalItem.toJson());
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
+                json.add("ingredient", JsonUtil.toJson(input, registries));
+                json.add("transitionalItem", transitionalItem.toJson(registries));
                 json.addProperty("loops", loops);
                 json.add("sequence", JsonUtil.toList(sequence, e -> {
                     JsonObject o = new JsonObject();
-                    e.toJson(o);
+                    e.toJson(o, registries);
                     return o;
                 }));
                 json.add("results", JsonUtil.toList(outputs, e -> {
@@ -350,8 +352,8 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
     }
 
     public static class Splashing extends Processing {
-        public Splashing(String namespace, PackOutput output) {
-            super("splashing", namespace, output);
+        public Splashing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("splashing", namespace, output, registries);
         }
     }
 
@@ -360,8 +362,8 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
      * {@see https://github.com/Creators-of-Create/Create/blob/mc1.18/dev/src/main/java/com/simibubi/create/content/contraptions/processing/ProcessingRecipeBuilder.java}
      */
     public static abstract class Processing extends CreateDataProvider<Processing.Builder> {
-        protected Processing(String folder, String namespace, PackOutput output) {
-            super(folder, namespace, output);
+        protected Processing(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super(folder, namespace, output, registries);
         }
 
         /**
@@ -585,7 +587,7 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
             }
 
             @Override
-            protected void toJson(JsonObject json) {
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
                 if (duration <= 0)
                     throw new SerializationException("This recipe needs a duration of at least 1!");
                 json.addProperty("processingTime", duration);
@@ -595,8 +597,8 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
                 if (heatRequirement != HeatRequirement.NONE) {
                     json.addProperty("heatRequirement", heatRequirement.toString());
                 }
-                json.add("ingredients", JsonUtil.mergeArrays(JsonUtil.toIngredientList(inputs), JsonUtil.toList(fluidInputs)));
-                json.add("results", JsonUtil.mergeArrays(JsonUtil.toList(outputs), JsonUtil.toList(fluidOutputs)));
+                json.add("ingredients", JsonUtil.mergeArrays(JsonUtil.toIngredientList(inputs, registries), JsonUtil.toList(fluidInputs, registries)));
+                json.add("results", JsonUtil.mergeArrays(JsonUtil.toList(outputs, registries), JsonUtil.toList(fluidOutputs, registries)));
             }
         }
     }

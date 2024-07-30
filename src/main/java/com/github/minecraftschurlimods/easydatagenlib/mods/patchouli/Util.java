@@ -1,34 +1,34 @@
 package com.github.minecraftschurlimods.easydatagenlib.mods.patchouli;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.mojang.serialization.Dynamic;
-import com.mojang.serialization.JsonOps;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.NbtOps;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.commands.arguments.item.ItemInput;
+import net.minecraft.commands.arguments.item.ItemParser;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.apache.commons.lang3.tuple.Triple;
 
 public class Util {
+    public static String serializeStack(ItemStack stack, HolderLookup.Provider registries) {
+        return new ItemInput(stack.getItemHolder(), stack.getComponents()).serialize(registries) + (stack.getCount() == 1 ? "" :("#" + stack.getCount()));
+    }
 
-    private static final Gson GSON = new GsonBuilder().create();
-
-    public static String serializeStack(ItemStack stack) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(BuiltInRegistries.ITEM.getKey(stack.getItem()));
-
-        int count = stack.getCount();
-        if (count > 1) {
-            builder.append("#");
-            builder.append(count);
+    public static Triple<Holder<Item>, DataComponentMap, Integer> deserializeStack(String string, HolderLookup.Provider registries) {
+        StringReader reader = new StringReader(string.trim());
+        ItemParser itemParser = new ItemParser(registries);
+        try {
+            ItemParser.ItemResult result = itemParser.parse(reader);
+            int count = 1;
+            if (reader.canRead()) {
+                reader.expect('#');
+                count = reader.readInt();
+            }
+            return Triple.of(result.item(), result.components(), count);
+        } catch (CommandSyntaxException e) {
+            throw new RuntimeException(e);
         }
-
-        if (stack.hasTag()) {
-            Dynamic<?> dyn = new Dynamic<>(NbtOps.INSTANCE, stack.getTag());
-            JsonElement j = dyn.convert(JsonOps.INSTANCE).getValue();
-            builder.append(GSON.toJson(j));
-        }
-
-        return builder.toString();
     }
 }

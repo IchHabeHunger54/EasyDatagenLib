@@ -4,6 +4,7 @@ import com.github.minecraftschurlimods.easydatagenlib.util.JsonSerializable;
 import com.github.minecraftschurlimods.easydatagenlib.util.JsonUtil;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.crafting.Ingredient;
 
 public class IngredientWithAmount implements JsonSerializable {
@@ -20,9 +21,9 @@ public class IngredientWithAmount implements JsonSerializable {
     }
 
     @Override
-    public JsonElement toJson() {
+    public JsonElement toJson(HolderLookup.Provider registries) {
         JsonObject result = new JsonObject();
-        result.add("ingredient", JsonUtil.toJson(ingredient));
+        result.add("ingredient", JsonUtil.toJson(ingredient, registries));
         if (amount > 1) {
             result.addProperty("amount", amount);
         }

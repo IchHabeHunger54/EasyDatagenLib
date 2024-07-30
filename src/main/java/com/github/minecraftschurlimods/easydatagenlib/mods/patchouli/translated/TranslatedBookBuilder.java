@@ -3,6 +3,7 @@ package com.github.minecraftschurlimods.easydatagenlib.mods.patchouli.translated
 import com.github.minecraftschurlimods.easydatagenlib.mods.patchouli.BookBuilder;
 import com.github.minecraftschurlimods.easydatagenlib.mods.patchouli.PatchouliBookProvider;
 import com.github.minecraftschurlimods.easydatagenlib.mods.patchouli.Util;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -11,8 +12,8 @@ import java.util.function.BiConsumer;
 public class TranslatedBookBuilder extends BookBuilder<TranslatedBookBuilder, TranslatedCategoryBuilder, TranslatedEntryBuilder> {
     private final BiConsumer<String, String> languageProvider;
 
-    public TranslatedBookBuilder(ResourceLocation id, String name, String landingText, BiConsumer<String, String> languageProvider, PatchouliBookProvider provider) {
-        super(id, name, landingText, provider);
+    public TranslatedBookBuilder(ResourceLocation id, String name, String landingText, BiConsumer<String, String> languageProvider, PatchouliBookProvider provider, HolderLookup.Provider registries) {
+        super(id, name, landingText, provider, registries);
         this.languageProvider = languageProvider;
         setUseI18n();
         String key = "item.%s.%s".formatted(id.getNamespace(), id.getPath());
@@ -22,7 +23,7 @@ public class TranslatedBookBuilder extends BookBuilder<TranslatedBookBuilder, Tr
 
     @Override
     public TranslatedCategoryBuilder addCategory(String id, String name, String description, ItemStack icon) {
-        return this.addCategory(id, name, description, Util.serializeStack(icon));
+        return this.addCategory(id, name, description, Util.serializeStack(icon, getRegistries()));
     }
 
     @Override

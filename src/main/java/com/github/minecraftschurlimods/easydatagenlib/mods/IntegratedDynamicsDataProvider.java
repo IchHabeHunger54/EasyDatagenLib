@@ -6,6 +6,7 @@ import com.github.minecraftschurlimods.easydatagenlib.util.JsonUtil;
 import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentFluidStack;
 import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItemStack;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -15,16 +16,17 @@ import net.minecraft.world.level.material.Fluid;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
-    protected IntegratedDynamicsDataProvider(String folder, String namespace, PackOutput output) {
-        super(new ResourceLocation("integrateddynamics", folder), namespace, output);
+    protected IntegratedDynamicsDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(new ResourceLocation("integrateddynamics", folder), namespace, output, registries);
     }
     //TODO Drying Basin, Mechanical Drying Basin
 
     public static class MechanicalSqueezing extends IntegratedDynamicsDataProvider<MechanicalSqueezing.Builder> {
-        public MechanicalSqueezing(String namespace, PackOutput output) {
-            super("mechanical_squeezer", namespace, output);
+        public MechanicalSqueezing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("mechanical_squeezer", namespace, output, registries);
         }
 
         /**
@@ -237,13 +239,13 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
             }
 
             @Override
-            protected void toJson(JsonObject json) {
-                json.add("item", JsonUtil.toJson(input));
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
+                json.add("item", JsonUtil.toJson(input, registries));
                 json.addProperty("duration", duration);
                 JsonObject output = new JsonObject();
-                output.add("items", JsonUtil.toList(outputs));
+                output.add("items", JsonUtil.toList(outputs, registries));
                 if (outputFluid != null) {
-                    output.add("fluid", outputFluid.toJson());
+                    output.add("fluid", outputFluid.toJson(registries));
                 }
                 json.add("result", output);
             }
@@ -251,8 +253,8 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
     }
 
     public static class Squeezing extends IntegratedDynamicsDataProvider<Squeezing.Builder> {
-        public Squeezing(String namespace, PackOutput output) {
-            super("squeezer", namespace, output);
+        public Squeezing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("squeezer", namespace, output, registries);
         }
 
         /**
@@ -462,12 +464,12 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
             }
 
             @Override
-            protected void toJson(JsonObject json) {
-                json.add("item", JsonUtil.toJson(input));
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
+                json.add("item", JsonUtil.toJson(input, registries));
                 JsonObject output = new JsonObject();
-                output.add("items", JsonUtil.toList(outputs));
+                output.add("items", JsonUtil.toList(outputs, registries));
                 if (outputFluid != null) {
-                    output.add("fluid", outputFluid.toJson());
+                    output.add("fluid", outputFluid.toJson(registries));
                 }
                 json.add("result", output);
             }

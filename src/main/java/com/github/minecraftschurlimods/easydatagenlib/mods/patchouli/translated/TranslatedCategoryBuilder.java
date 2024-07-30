@@ -11,7 +11,7 @@ public class TranslatedCategoryBuilder extends CategoryBuilder<TranslatedBookBui
 
     @Override
     public TranslatedCategoryBuilder addSubCategory(String id, String name, String description, ItemStack icon) {
-        return addSubCategory(id, name, description, Util.serializeStack(icon));
+        return addSubCategory(id, name, description, Util.serializeStack(icon, getBookBuilder().getRegistries()));
     }
 
     @Override
@@ -22,7 +22,7 @@ public class TranslatedCategoryBuilder extends CategoryBuilder<TranslatedBookBui
 
     @Override
     public TranslatedEntryBuilder addEntry(String id, String name, ItemStack icon) {
-        return addEntry(id, name, Util.serializeStack(icon));
+        return addEntry(id, name, Util.serializeStack(icon, getBookBuilder().getRegistries()));
     }
 
     @Override

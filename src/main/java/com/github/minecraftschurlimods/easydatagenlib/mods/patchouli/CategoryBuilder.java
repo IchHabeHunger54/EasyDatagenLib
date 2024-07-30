@@ -122,4 +122,8 @@ public abstract class CategoryBuilder<B extends BookBuilder<B, C, E>, C extends 
     public ResourceLocation getId() {
         return this.id;
     }
+
+    public B getBookBuilder() {
+        return this.bookBuilder;
+    }
 }

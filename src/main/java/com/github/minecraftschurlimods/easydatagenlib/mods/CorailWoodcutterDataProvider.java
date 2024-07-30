@@ -5,19 +5,22 @@ import com.github.minecraftschurlimods.easydatagenlib.api.AbstractRecipeProvider
 import com.github.minecraftschurlimods.easydatagenlib.util.JsonUtil;
 import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItemStack;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 
+import java.util.concurrent.CompletableFuture;
+
 public abstract class CorailWoodcutterDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
-    protected CorailWoodcutterDataProvider(String folder, String namespace, PackOutput output) {
-        super(new ResourceLocation("corail_woodcutter", folder), namespace, output);
+    protected CorailWoodcutterDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(new ResourceLocation("corail_woodcutter", folder), namespace, output, registries);
     }
 
     public static class Sawing extends CorailWoodcutterDataProvider<Sawing.Builder> {
-        public Sawing(String namespace, PackOutput output) {
-            super("woodcutting", namespace, output);
+        public Sawing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("woodcutting", namespace, output, registries);
         }
 
         /**
@@ -81,8 +84,8 @@ public abstract class CorailWoodcutterDataProvider<T extends AbstractRecipeBuild
             }
 
             @Override
-            protected void toJson(JsonObject json) {
-                json.add("ingredient", JsonUtil.toJson(input));
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
+                json.add("ingredient", JsonUtil.toJson(input, registries));
                 json.addProperty("result", output.item.toString());
                 json.addProperty("count", output.count);
             }

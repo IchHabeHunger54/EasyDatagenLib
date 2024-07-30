@@ -9,6 +9,7 @@ import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItem
 import com.github.minecraftschurlimods.easydatagenlib.util.thermal.IngredientWithCount;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -18,58 +19,59 @@ import net.minecraft.world.level.material.Fluid;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
-    protected ThermalDataProvider(String folder, String namespace, PackOutput output) {
-        super(new ResourceLocation("thermal", folder), namespace, output);
+    protected ThermalDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(new ResourceLocation("thermal", folder), namespace, output, registries);
     }
     //TODO Fuels, Fisher Boost, Hive Extractor, Potion Diffuser Boost, Rock Gen Mapping, Tree Extractor Boost, Tree Extractor Mapping
 
     public static class Bottling extends Processing {
-        public Bottling(String namespace, PackOutput output) {
-            super("bottler", namespace, output);
+        public Bottling(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("bottler", namespace, output, registries);
         }
     }
 
     public static class Brewing extends Processing {
-        public Brewing(String namespace, PackOutput output) {
-            super("brewer", namespace, output);
+        public Brewing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("brewer", namespace, output, registries);
         }
     }
 
     public static class Centrifuging extends Processing {
-        public Centrifuging(String namespace, PackOutput output) {
-            super("centrifuge", namespace, output);
+        public Centrifuging(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("centrifuge", namespace, output, registries);
         }
     }
 
     public static class Chilling extends Processing {
-        public Chilling(String namespace, PackOutput output) {
-            super("chiller", namespace, output);
+        public Chilling(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("chiller", namespace, output, registries);
         }
     }
 
     public static class Crucible extends Processing {
-        public Crucible(String namespace, PackOutput output) {
-            super("crucible", namespace, output);
+        public Crucible(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("crucible", namespace, output, registries);
         }
     }
 
     public static class Crystallizing extends Processing {
-        public Crystallizing(String namespace, PackOutput output) {
-            super("crystallizer", namespace, output);
+        public Crystallizing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("crystallizer", namespace, output, registries);
         }
     }
 
     public static class Furnace extends Processing {
-        public Furnace(String namespace, PackOutput output) {
-            super("furnace", namespace, output);
+        public Furnace(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("furnace", namespace, output, registries);
         }
     }
 
     public static class Insolating extends Processing {
-        public Insolating(String namespace, PackOutput output) {
-            super("insolator", namespace, output);
+        public Insolating(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("insolator", namespace, output, registries);
         }
 
         /**
@@ -109,8 +111,8 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
             }
 
             @Override
-            protected void toJson(JsonObject json) {
-                super.toJson(json);
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
+                super.toJson(json, registries);
                 if (waterModifier != null) {
                     json.addProperty("water_mod", waterModifier);
                 }
@@ -119,50 +121,50 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
     }
 
     public static class Pressing extends Processing {
-        public Pressing(String namespace, PackOutput output) {
-            super("press", namespace, output);
+        public Pressing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("press", namespace, output, registries);
         }
     }
 
     public static class PulverizerRecycling extends Processing {
-        public PulverizerRecycling(String namespace, PackOutput output) {
-            super("pulverizer_recycle", namespace, output);
+        public PulverizerRecycling(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("pulverizer_recycle", namespace, output, registries);
         }
     }
 
     public static class Pulverizing extends Processing {
-        public Pulverizing(String namespace, PackOutput output) {
-            super("pulverizer", namespace, output);
+        public Pulverizing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("pulverizer", namespace, output, registries);
         }
     }
 
     public static class Pyrolyzing extends Processing {
-        public Pyrolyzing(String namespace, PackOutput output) {
-            super("pyrolyzer", namespace, output);
+        public Pyrolyzing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("pyrolyzer", namespace, output, registries);
         }
     }
 
     public static class Refining extends Processing {
-        public Refining(String namespace, PackOutput output) {
-            super("refinery", namespace, output);
+        public Refining(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("refinery", namespace, output, registries);
         }
     }
 
     public static class Sawing extends Processing {
-        public Sawing(String namespace, PackOutput output) {
-            super("sawmill", namespace, output);
+        public Sawing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("sawmill", namespace, output, registries);
         }
     }
 
     public static class SmelterRecycling extends Processing {
-        public SmelterRecycling(String namespace, PackOutput output) {
-            super("smelter_recycle", namespace, output);
+        public SmelterRecycling(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("smelter_recycle", namespace, output, registries);
         }
     }
 
     public static class Smelting extends Processing {
-        public Smelting(String namespace, PackOutput output) {
-            super("smelter", namespace, output);
+        public Smelting(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("smelter", namespace, output, registries);
         }
     }
 
@@ -171,8 +173,8 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
      * {@see https://github.com/CoFH/ThermalCore/blob/1.19.x/src/main/java/cofh/thermal/lib/util/recipes/MachineRecipeSerializer.java}
      */
     public static abstract class Processing extends ThermalDataProvider<Processing.Builder> {
-        protected Processing(String folder, String namespace, PackOutput output) {
-            super(folder, namespace, output);
+        protected Processing(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super(folder, namespace, output, registries);
         }
 
         /**
@@ -446,7 +448,7 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
             }
 
             @Override
-            protected void toJson(JsonObject json) {
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
                 if (experience != 0) {
                     json.addProperty("experience", experience);
                 }
@@ -456,9 +458,9 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
                 if (energyModifier != null) {
                     json.addProperty("energy_mod", energyModifier);
                 }
-                JsonArray input = JsonUtil.toList(inputItems);
+                JsonArray input = JsonUtil.toList(inputItems, registries);
                 for (FluidIngredient ingredient : inputFluids) {
-                    JsonObject fluid = ingredient.toJson();
+                    JsonObject fluid = ingredient.toJson(registries);
                     if (fluid.has("tag")) {
                         fluid.add("fluid_tag", fluid.get("tag"));
                         fluid.remove("tag");
@@ -470,7 +472,7 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
                 } else {
                     json.add("input", input);
                 }
-                json.add("output", JsonUtil.mergeArrays(JsonUtil.toList(outputItems), JsonUtil.toList(outputFluids)));
+                json.add("output", JsonUtil.mergeArrays(JsonUtil.toList(outputItems, registries), JsonUtil.toList(outputFluids, registries)));
             }
         }
     }

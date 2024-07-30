@@ -15,7 +15,7 @@ public class SpotlightPageBuilder extends AbstractPageBuilder<SpotlightPageBuild
 
     public SpotlightPageBuilder(ItemStack stack, EntryBuilder<?,?,?> parent) {
         super(new ResourceLocation("patchouli", "spotlight"), parent);
-        this.item = Util.serializeStack(stack);
+        this.item = Util.serializeStack(stack, parent.getParent().getBookBuilder().getRegistries());
     }
 
     @Override

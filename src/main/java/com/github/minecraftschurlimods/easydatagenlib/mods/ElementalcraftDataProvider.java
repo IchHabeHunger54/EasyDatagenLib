@@ -5,33 +5,36 @@ import com.github.minecraftschurlimods.easydatagenlib.api.AbstractRecipeProvider
 import com.github.minecraftschurlimods.easydatagenlib.util.JsonUtil;
 import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItemStack;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 
+import java.util.concurrent.CompletableFuture;
+
 public abstract class ElementalcraftDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
-    protected ElementalcraftDataProvider(String folder, String namespace, PackOutput output) {
-        super(new ResourceLocation("elementalcraft", folder), namespace, output);
+    protected ElementalcraftDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(new ResourceLocation("elementalcraft", folder), namespace, output, registries);
     }
     //TODO Binding, Crystallization, Infusion, Inscription, Pure Infusion, Spell Craft
 
     public static class Grinding extends IO {
-        public Grinding(String namespace, PackOutput output) {
-            super("grinding", namespace, output);
+        public Grinding(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("grinding", namespace, output, registries);
         }
     }
 
     public static class Sawing extends IO {
-        public Sawing(String namespace, PackOutput output) {
-            super("sawing", namespace, output);
+        public Sawing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("sawing", namespace, output, registries);
         }
     }
 
     public static abstract class IO extends ElementalcraftDataProvider<IO.Builder> {
-        protected IO(String folder, String namespace, PackOutput output) {
-            super(folder, namespace, output);
+        protected IO(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super(folder, namespace, output, registries);
         }
 
         /**
@@ -141,9 +144,9 @@ public abstract class ElementalcraftDataProvider<T extends AbstractRecipeBuilder
             }
 
             @Override
-            protected void toJson(JsonObject json) {
-                json.add("input", JsonUtil.toJson(input));
-                json.add("output", output.toJson());
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
+                json.add("input", JsonUtil.toJson(input, registries));
+                json.add("output", output.toJson(registries));
                 json.addProperty("element_amount", elementAmount);
                 json.addProperty("luck_ratio", luckRatio);
             }

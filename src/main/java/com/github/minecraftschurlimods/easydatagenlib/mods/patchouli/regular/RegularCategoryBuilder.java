@@ -11,7 +11,7 @@ public class RegularCategoryBuilder extends CategoryBuilder<RegularBookBuilder, 
 
     @Override
     public RegularCategoryBuilder addSubCategory(String id, String name, String description, ItemStack icon) {
-        return addSubCategory(id, name, description, Util.serializeStack(icon));
+        return addSubCategory(id, name, description, Util.serializeStack(icon, getBookBuilder().getRegistries()));
     }
 
     @Override
@@ -21,7 +21,7 @@ public class RegularCategoryBuilder extends CategoryBuilder<RegularBookBuilder, 
 
     @Override
     public RegularEntryBuilder addEntry(String id, String name, ItemStack icon) {
-        return addEntry(id, name, Util.serializeStack(icon));
+        return addEntry(id, name, Util.serializeStack(icon, getBookBuilder().getRegistries()));
     }
 
     @Override

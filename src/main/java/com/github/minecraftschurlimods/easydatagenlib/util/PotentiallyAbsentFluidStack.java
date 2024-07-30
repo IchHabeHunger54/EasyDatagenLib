@@ -1,6 +1,7 @@
 package com.github.minecraftschurlimods.easydatagenlib.util;
 
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -62,7 +63,7 @@ public class PotentiallyAbsentFluidStack implements JsonSerializable {
      * @return The JSON representation of this object.
      */
     @Override
-    public JsonObject toJson() {
+    public JsonObject toJson(HolderLookup.Provider registries) {
         JsonObject json = new JsonObject();
         if (fluid == null) throw new IllegalArgumentException("Cannot serialize an fluid stack without an fluid id!");
         json.addProperty("fluid", fluid.toString());
@@ -121,8 +122,8 @@ public class PotentiallyAbsentFluidStack implements JsonSerializable {
         }
 
         @Override
-        public JsonObject toJson() {
-            JsonObject json = super.toJson();
+        public JsonObject toJson(HolderLookup.Provider registries) {
+            JsonObject json = super.toJson(registries);
             if (chance > 0 && chance != 1) {
                 json.addProperty("chance", chance);
             }

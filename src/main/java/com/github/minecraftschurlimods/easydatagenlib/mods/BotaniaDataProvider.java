@@ -5,6 +5,7 @@ import com.github.minecraftschurlimods.easydatagenlib.api.AbstractRecipeProvider
 import com.github.minecraftschurlimods.easydatagenlib.util.JsonUtil;
 import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItemStack;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -12,15 +13,17 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 
+import java.util.concurrent.CompletableFuture;
+
 public abstract class BotaniaDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
-    protected BotaniaDataProvider(String folder, String namespace, PackOutput output) {
-        super(new ResourceLocation("botania", folder), namespace, output);
+    protected BotaniaDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(new ResourceLocation("botania", folder), namespace, output, registries);
     }
     //TODO Brew, Elven Trade, Orechid, Orechid Ignem, Petal Apothecary, Pure Daisy, Runic Altar, Terra Plate
 
     public static class Infusing extends BotaniaDataProvider<Infusing.Builder> {
-        public Infusing(String namespace, PackOutput output) {
-            super("mana_infusion", namespace, output);
+        public Infusing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("mana_infusion", namespace, output, registries);
         }
 
         /**
@@ -153,10 +156,10 @@ public abstract class BotaniaDataProvider<T extends AbstractRecipeBuilder<?>> ex
             }
 
             @Override
-            protected void toJson(JsonObject json) {
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
                 json.addProperty("mana", mana);
-                json.add("input", JsonUtil.toJson(input));
-                json.add("output", output.toJson());
+                json.add("input", JsonUtil.toJson(input, registries));
+                json.add("output", output.toJson(registries));
                 if (group != null) {
                     json.addProperty("group", group);
                 }

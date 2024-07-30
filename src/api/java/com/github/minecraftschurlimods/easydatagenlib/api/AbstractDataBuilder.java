@@ -1,6 +1,7 @@
 package com.github.minecraftschurlimods.easydatagenlib.api;
 
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -27,7 +28,7 @@ public abstract class AbstractDataBuilder<T extends AbstractDataBuilder<T>> {
     /**
      * Adds this builder's contents to the given {@link JsonObject}.
      */
-    protected abstract void toJson(JsonObject json);
+    protected abstract void toJson(JsonObject json, HolderLookup.Provider registries);
 
     /**
      * Shortcut to get a block's registry name.

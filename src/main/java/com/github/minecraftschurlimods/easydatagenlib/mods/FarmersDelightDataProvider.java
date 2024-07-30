@@ -5,6 +5,7 @@ import com.github.minecraftschurlimods.easydatagenlib.api.AbstractRecipeProvider
 import com.github.minecraftschurlimods.easydatagenlib.util.JsonUtil;
 import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItemStack;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -13,15 +14,16 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class FarmersDelightDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
-    protected FarmersDelightDataProvider(String folder, String namespace, PackOutput output) {
-        super(new ResourceLocation("farmersdelight", folder), namespace, output);
+    protected FarmersDelightDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(new ResourceLocation("farmersdelight", folder), namespace, output, registries);
     }
 
     public static class Cooking extends FarmersDelightDataProvider<Cooking.Builder> {
-        public Cooking(String namespace, PackOutput output) {
-            super("cooking", namespace, output);
+        public Cooking(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("cooking", namespace, output, registries);
         }
 
         /**
@@ -133,24 +135,24 @@ public abstract class FarmersDelightDataProvider<T extends AbstractRecipeBuilder
             }
 
             @Override
-            protected void toJson(JsonObject json) {
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
                 json.addProperty("cookingtime", duration);
                 json.addProperty("experience", experience);
-                json.add("result", output.toJson());
+                json.add("result", output.toJson(registries));
                 if (recipeBookTab != null) {
                     json.addProperty("recipe_book_tab", recipeBookTab);
                 }
                 if (container != null) {
-                    json.add("container", container.toJson());
+                    json.add("container", container.toJson(registries));
                 }
-                json.add("ingredients", JsonUtil.toIngredientList(ingredients));
+                json.add("ingredients", JsonUtil.toIngredientList(ingredients, registries));
             }
         }
     }
 
     public static class Cutting extends FarmersDelightDataProvider<Cutting.Builder> {
-        public Cutting(String namespace, PackOutput output) {
-            super("cutting", namespace, output);
+        public Cutting(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("cutting", namespace, output, registries);
         }
 
         /**
@@ -270,13 +272,13 @@ public abstract class FarmersDelightDataProvider<T extends AbstractRecipeBuilder
             }
 
             @Override
-            protected void toJson(JsonObject json) {
-                json.add("ingredients", JsonUtil.toIngredientList(List.of(input)));
-                json.add("tool", JsonUtil.toJson(tool));
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
+                json.add("ingredients", JsonUtil.toIngredientList(List.of(input), registries));
+                json.add("tool", JsonUtil.toJson(tool, registries));
                 if (sound != null) {
                     json.addProperty("sound", sound);
                 }
-                json.add("result", JsonUtil.toList(outputs));
+                json.add("result", JsonUtil.toList(outputs, registries));
             }
         }
     }

@@ -3,6 +3,7 @@ package com.github.minecraftschurlimods.easydatagenlib.util.mekanism;
 import com.github.minecraftschurlimods.easydatagenlib.util.JsonSerializable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 
 public abstract class Chemical implements JsonSerializable {
@@ -15,7 +16,7 @@ public abstract class Chemical implements JsonSerializable {
     public abstract String getName();
 
     @Override
-    public JsonElement toJson() {
+    public JsonElement toJson(HolderLookup.Provider registries) {
         JsonObject json = new JsonObject();
         json.addProperty(getName(), id.toString());
         return json;
@@ -23,8 +24,8 @@ public abstract class Chemical implements JsonSerializable {
 
     public record Stack<T extends Chemical>(T chemical, int amount) implements JsonSerializable {
         @Override
-        public JsonElement toJson() {
-            JsonObject json = chemical.toJson().getAsJsonObject();
+        public JsonElement toJson(HolderLookup.Provider registries) {
+            JsonObject json = chemical.toJson(registries).getAsJsonObject();
             json.addProperty("amount", amount);
             return json;
         }

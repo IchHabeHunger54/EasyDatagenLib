@@ -4,19 +4,22 @@ import com.github.minecraftschurlimods.easydatagenlib.api.AbstractRecipeBuilder;
 import com.github.minecraftschurlimods.easydatagenlib.api.AbstractRecipeProvider;
 import com.github.minecraftschurlimods.easydatagenlib.util.JsonUtil;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 
+import java.util.concurrent.CompletableFuture;
+
 public abstract class OccultismDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
-    protected OccultismDataProvider(String folder, String namespace, PackOutput output) {
-        super(new ResourceLocation("occultism", folder), namespace, output);
+    protected OccultismDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(new ResourceLocation("occultism", folder), namespace, output, registries);
     }
     //TODO Miner, Ritual, Spirit Fire, Spirit Trade
 
     public static class Crushing extends OccultismDataProvider<Crushing.Builder> {
-        public Crushing(String namespace, PackOutput output) {
-            super("crushing", namespace, output);
+        public Crushing(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("crushing", namespace, output, registries);
         }
 
         /**
@@ -86,7 +89,7 @@ public abstract class OccultismDataProvider<T extends AbstractRecipeBuilder<?>> 
             }
 
             @Override
-            protected void toJson(JsonObject json) {
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
                 json.addProperty("crushing_time", duration);
                 if (minTier > -1) {
                     json.addProperty("min_tier", minTier);
@@ -94,8 +97,8 @@ public abstract class OccultismDataProvider<T extends AbstractRecipeBuilder<?>> 
                 if (ignoreCrushingMultiplier) {
                     json.addProperty("ignore_crushing_multiplier", true);
                 }
-                json.add("ingredient", JsonUtil.toJson(input));
-                JsonObject output = JsonUtil.toJson(this.output).getAsJsonObject();
+                json.add("ingredient", JsonUtil.toJson(input, registries));
+                JsonObject output = JsonUtil.toJson(this.output, registries).getAsJsonObject();
                 output.addProperty("count", count);
                 json.add("result", output);
             }

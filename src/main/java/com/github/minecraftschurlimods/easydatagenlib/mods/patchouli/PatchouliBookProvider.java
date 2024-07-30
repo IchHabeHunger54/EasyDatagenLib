@@ -79,12 +79,12 @@ public abstract class PatchouliBookProvider implements DataProvider {
         return DataProvider.saveStable(cache, json, outputPath);
     }
 
-    public RegularBookBuilder createBookBuilder(String id, String name, String landingText) {
-        return new RegularBookBuilder(new ResourceLocation(this.namespace, id), name, landingText, this);
+    public RegularBookBuilder createBookBuilder(String id, String name, String landingText, HolderLookup.Provider registries) {
+        return new RegularBookBuilder(new ResourceLocation(this.namespace, id), name, landingText, this, registries);
     }
 
-    public TranslatedBookBuilder createBookBuilder(String id, String name, String landingText, BiConsumer<String, String> langProvider) {
-        return new TranslatedBookBuilder(new ResourceLocation(this.namespace, id), name, landingText, langProvider, this);
+    public TranslatedBookBuilder createBookBuilder(String id, String name, String landingText, BiConsumer<String, String> langProvider, HolderLookup.Provider registries) {
+        return new TranslatedBookBuilder(new ResourceLocation(this.namespace, id), name, landingText, langProvider, this, registries);
     }
 
     /**

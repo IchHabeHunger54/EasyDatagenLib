@@ -6,7 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.Util;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.state.BlockState;
@@ -52,11 +52,12 @@ public class JsonUtil {
     }
 
     /**
-     * @param list A list of {@link JsonSerializable}s.
+     * @param list       A list of {@link JsonSerializable}s.
+     * @param registries
      * @return A {@link JsonArray}, constructed from the given list.
      */
-    public static JsonArray toList(List<? extends JsonSerializable> list) {
-        return toList(list, JsonSerializable::toJson);
+    public static JsonArray toList(List<? extends JsonSerializable> list, HolderLookup.Provider registries) {
+        return toList(list, jsonSerializable -> jsonSerializable.toJson(registries));
     }
 
     /**
@@ -103,8 +104,8 @@ public class JsonUtil {
      * @param list A list of {@link Ingredient}s.
      * @return A {@link JsonArray}, constructed from the given list.
      */
-    public static JsonArray toIngredientList(List<? extends Ingredient> list) {
-        return toList(list, JsonUtil::toJson);
+    public static JsonArray toIngredientList(List<? extends Ingredient> list, HolderLookup.Provider registries) {
+        return toList(list, ingredient -> toJson(ingredient, registries));
     }
 
     /**
@@ -137,14 +138,14 @@ public class JsonUtil {
         return json;
     }
     
-    public static JsonElement toJson(Ingredient ingredient) {
-        if (ingredient instanceof PotentiallyAbsentIngredient) {
-            return ((PotentiallyAbsentIngredient) ingredient).toJson();
+    public static JsonElement toJson(Ingredient ingredient, HolderLookup.Provider registries) {
+        if (ingredient.getCustomIngredient() instanceof PotentiallyAbsentIngredient potentiallyAbsentIngredient) {
+            return potentiallyAbsentIngredient.toJson();
         }
-        if (ingredient instanceof ToolActionIngredient) {
-            return ((ToolActionIngredient) ingredient).toJson();
+        if (ingredient.getCustomIngredient() instanceof ToolActionIngredient toolActionIngredient) {
+            return toolActionIngredient.toJson();
         }
-        return Util.getOrThrow(Ingredient.CODEC.encodeStart(JsonOps.INSTANCE, ingredient), RuntimeException::new);
+        return Ingredient.CODEC.encodeStart(registries.createSerializationContext(JsonOps.INSTANCE), ingredient).getOrThrow();
     }
 
     /**

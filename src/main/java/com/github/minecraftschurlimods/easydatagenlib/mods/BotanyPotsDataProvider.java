@@ -7,6 +7,7 @@ import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItem
 import com.github.minecraftschurlimods.easydatagenlib.util.botanypots.DisplayState;
 import com.github.minecraftschurlimods.easydatagenlib.util.botanypots.HarvestEntry;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -15,16 +16,17 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class BotanyPotsDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
-    protected BotanyPotsDataProvider(String folder, String namespace, PackOutput output) {
-        super(new ResourceLocation("botanypots", folder), namespace, output);
+    protected BotanyPotsDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(new ResourceLocation("botanypots", folder), namespace, output, registries);
     }
     //TODO Fertilizer, Pot Interaction
 
     public static class Crop extends BotanyPotsDataProvider<Crop.Builder> {
-        public Crop(String namespace, PackOutput output) {
-            super("crop", namespace, output);
+        public Crop(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("crop", namespace, output, registries);
         }
 
         /**
@@ -166,10 +168,10 @@ public abstract class BotanyPotsDataProvider<T extends AbstractRecipeBuilder<?>>
             }
 
             @Override
-            protected void toJson(JsonObject json) {
-                json.add("seed", JsonUtil.toJson(input));
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
+                json.add("seed", JsonUtil.toJson(input, registries));
                 json.addProperty("growthTicks", duration);
-                json.add("display", JsonUtil.singleOrArray(JsonUtil.toList(display)));
+                json.add("display", JsonUtil.singleOrArray(JsonUtil.toList(display, registries)));
                 if (lightLevel != 0) {
                     json.addProperty("lightLevel", lightLevel);
                 }
@@ -187,8 +189,8 @@ public abstract class BotanyPotsDataProvider<T extends AbstractRecipeBuilder<?>>
     }
 
     public static class Soil extends BotanyPotsDataProvider<Soil.Builder> {
-        public Soil(String namespace, PackOutput output) {
-            super("soil", namespace, output);
+        public Soil(String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super("soil", namespace, output, registries);
         }
 
         /**
@@ -244,10 +246,10 @@ public abstract class BotanyPotsDataProvider<T extends AbstractRecipeBuilder<?>>
             }
 
             @Override
-            protected void toJson(JsonObject json) {
-                json.add("input", JsonUtil.toJson(input));
+            protected void toJson(JsonObject json, HolderLookup.Provider registries) {
+                json.add("input", JsonUtil.toJson(input, registries));
                 json.addProperty("growthModifier", growthModifier);
-                json.add("display", display.toJson());
+                json.add("display", display.toJson(registries));
                 if (lightLevel != 0) {
                     json.addProperty("lightLevel", lightLevel);
                 }
