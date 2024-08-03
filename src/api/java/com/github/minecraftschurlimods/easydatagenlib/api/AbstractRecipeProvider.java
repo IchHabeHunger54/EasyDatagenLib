@@ -26,7 +26,7 @@ public abstract class AbstractRecipeProvider<T extends AbstractRecipeBuilder<?>>
      * @param output     The data generator to use.
      */
     protected AbstractRecipeProvider(ResourceLocation recipeType, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(namespace, "recipes/" + (recipeType.getNamespace().equals(namespace) ? "" : "compat/" + recipeType.getNamespace() + "/") + recipeType.getPath(), PackOutput.Target.DATA_PACK, output, registries);
+        super(namespace, "recipe/" + (recipeType.getNamespace().equals(namespace) ? "" : "compat/" + recipeType.getNamespace() + "/") + recipeType.getPath(), PackOutput.Target.DATA_PACK, output, registries);
         this.recipeType = recipeType;
         this.name = makeName(recipeType);
     }

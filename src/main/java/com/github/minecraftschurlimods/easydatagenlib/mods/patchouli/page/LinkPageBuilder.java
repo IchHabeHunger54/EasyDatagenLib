@@ -12,7 +12,7 @@ public class LinkPageBuilder extends AbstractPageBuilder<LinkPageBuilder> {
     private String title;
 
     public LinkPageBuilder(String url, String linkText, EntryBuilder<?,?,?> entryBuilder) {
-        super(new ResourceLocation("patchouli", "link"), entryBuilder);
+        super(ResourceLocation.fromNamespaceAndPath("patchouli", "link"), entryBuilder);
         this.url = url;
         this.linkText = linkText;
     }

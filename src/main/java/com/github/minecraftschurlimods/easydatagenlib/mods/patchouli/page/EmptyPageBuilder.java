@@ -9,7 +9,7 @@ public class EmptyPageBuilder extends AbstractPageBuilder<EmptyPageBuilder> {
     private final boolean drawFiller;
 
     public EmptyPageBuilder(boolean drawFiller, EntryBuilder<?,?,?> entryBuilder) {
-        super(new ResourceLocation("patchouli", "empty"), entryBuilder);
+        super(ResourceLocation.fromNamespaceAndPath("patchouli", "empty"), entryBuilder);
         this.drawFiller = drawFiller;
     }
 

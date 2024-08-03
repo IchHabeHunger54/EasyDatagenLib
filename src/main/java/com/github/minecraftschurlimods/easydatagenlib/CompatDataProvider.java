@@ -4,7 +4,7 @@ import com.github.minecraftschurlimods.easydatagenlib.api.AbstractDataProvider;
 import com.github.minecraftschurlimods.easydatagenlib.mods.*;
 import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentIngredient;
 import com.github.minecraftschurlimods.easydatagenlib.util.botanypots.DisplayState;
-import com.github.minecraftschurlimods.easydatagenlib.util.farmersdelight.ToolActionIngredient;
+import com.github.minecraftschurlimods.easydatagenlib.util.farmersdelight.ItemAbilityIngredient;
 import com.github.minecraftschurlimods.easydatagenlib.util.immersiveengineering.ClocheRenderType;
 import com.github.minecraftschurlimods.easydatagenlib.util.mekanism.Chemical;
 import com.github.minecraftschurlimods.easydatagenlib.util.mekanism.Pigment;
@@ -23,8 +23,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.TallFlowerBlock;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.ToolActions;
 import net.neoforged.neoforge.common.conditions.NotCondition;
 import net.neoforged.neoforge.common.conditions.TagEmptyCondition;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -224,29 +224,29 @@ public abstract class CompatDataProvider implements DataProvider {
     //endregion
 
     //region HELPER
-    protected static final ResourceLocation AIR                  = new ResourceLocation("minecraft",      "air");
-    protected static final ResourceLocation ALCHEMY_CATALYST     = new ResourceLocation("botania",        "alchemy_catalyst");
-    protected static final ResourceLocation BIO_FUEL             = new ResourceLocation("mekanism",       "bio_fuel");
-    protected static final ResourceLocation CHEST                = new ResourceLocation("minecraft",      "chest");
-    protected static final ResourceLocation CONJURATION_CATALYST = new ResourceLocation("botania",        "conjuration_catalyst");
-    protected static final ResourceLocation EXPERIENCE_NUGGET    = new ResourceLocation("create",         "experience_nugget");
-    protected static final ResourceLocation GRAVEL               = new ResourceLocation("minecraft",      "gravel");
-    protected static final ResourceLocation RICH_SLAG            = new ResourceLocation("thermal",        "rich_slag");
-    protected static final ResourceLocation MEKANISM_SAWDUST     = new ResourceLocation("mekanism",       "sawdust");
-    protected static final ResourceLocation SHROOMLIGHT          = new ResourceLocation("minecraft",      "shroomlight");
-    protected static final ResourceLocation STICK                = new ResourceLocation("minecraft",      "stick");
-    protected static final ResourceLocation THERMAL_SAWDUST      = new ResourceLocation("thermal",        "sawdust");
-    protected static final ResourceLocation TREE_BARK            = new ResourceLocation("farmersdelight", "tree_bark");
-    protected static final Ingredient AXE_DIG               = ToolActionIngredient.of(ToolActions.AXE_DIG);
-    protected static final Ingredient AXE_STRIP             = ToolActionIngredient.of(ToolActions.AXE_STRIP);
+    protected static final ResourceLocation AIR                  = ResourceLocation.withDefaultNamespace("air");
+    protected static final ResourceLocation ALCHEMY_CATALYST     = ResourceLocation.fromNamespaceAndPath("botania", "alchemy_catalyst");
+    protected static final ResourceLocation BIO_FUEL             = ResourceLocation.fromNamespaceAndPath("mekanism", "bio_fuel");
+    protected static final ResourceLocation CHEST                = ResourceLocation.withDefaultNamespace("chest");
+    protected static final ResourceLocation CONJURATION_CATALYST = ResourceLocation.fromNamespaceAndPath("botania", "conjuration_catalyst");
+    protected static final ResourceLocation EXPERIENCE_NUGGET    = ResourceLocation.fromNamespaceAndPath("create", "experience_nugget");
+    protected static final ResourceLocation GRAVEL               = ResourceLocation.withDefaultNamespace("gravel");
+    protected static final ResourceLocation RICH_SLAG            = ResourceLocation.fromNamespaceAndPath("thermal", "rich_slag");
+    protected static final ResourceLocation MEKANISM_SAWDUST     = ResourceLocation.fromNamespaceAndPath("mekanism", "sawdust");
+    protected static final ResourceLocation SHROOMLIGHT          = ResourceLocation.withDefaultNamespace("shroomlight");
+    protected static final ResourceLocation STICK                = ResourceLocation.withDefaultNamespace("stick");
+    protected static final ResourceLocation THERMAL_SAWDUST      = ResourceLocation.fromNamespaceAndPath("thermal", "sawdust");
+    protected static final ResourceLocation TREE_BARK            = ResourceLocation.fromNamespaceAndPath("farmersdelight", "tree_bark");
+    protected static final Ingredient AXE_DIG               = ItemAbilityIngredient.of(ItemAbilities.AXE_DIG);
+    protected static final Ingredient AXE_STRIP             = ItemAbilityIngredient.of(ItemAbilities.AXE_STRIP);
     protected static final Ingredient COBBLESTONE           = Ingredient.of(Tags.Items.COBBLESTONES_NORMAL);
     protected static final Ingredient COBBLESTONE_DEEPSLATE = Ingredient.of(Tags.Items.COBBLESTONES_DEEPSLATE);
-    protected static final Ingredient KNIVES                = Ingredient.of(TagKey.create(Registries.ITEM, new ResourceLocation("forge", "tools/knives")));
+    protected static final Ingredient KNIVES                = Ingredient.of(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "tools/knives")));
     protected static final Ingredient MUSHROOM_SOIL         = Ingredient.of(Items.MYCELIUM, Items.PODZOL);
-    protected static final Ingredient PRESS_PACKING_3x3_DIE = PotentiallyAbsentIngredient.of(new ResourceLocation("thermal", "press_packing_3x3_die"));
-    protected static final Ingredient PRESS_UNPACKING_DIE   = PotentiallyAbsentIngredient.of(new ResourceLocation("thermal", "press_unpacking_die"));
-    protected static final Ingredient SLAG                  = Ingredient.of(TagKey.create(Registries.ITEM, new ResourceLocation("forge", "slag")));
-    protected static final Ingredient WOOD_DUST             = Ingredient.of(TagKey.create(Registries.ITEM, new ResourceLocation("forge", "dusts/wood")));
+    protected static final Ingredient PRESS_PACKING_3x3_DIE = PotentiallyAbsentIngredient.of(ResourceLocation.fromNamespaceAndPath("thermal", "press_packing_3x3_die"));
+    protected static final Ingredient PRESS_UNPACKING_DIE   = PotentiallyAbsentIngredient.of(ResourceLocation.fromNamespaceAndPath("thermal", "press_unpacking_die"));
+    protected static final Ingredient SLAG                  = Ingredient.of(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "slag")));
+    protected static final Ingredient WOOD_DUST             = Ingredient.of(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "dusts/wood")));
 
     /**
      * Shortcut to get a block's registry name.

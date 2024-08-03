@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class BotanyPotsDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
     protected BotanyPotsDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(new ResourceLocation("botanypots", folder), namespace, output, registries);
+        super(ResourceLocation.fromNamespaceAndPath("botanypots", folder), namespace, output, registries);
     }
     //TODO Fertilizer, Pot Interaction
 
@@ -35,7 +35,7 @@ public abstract class BotanyPotsDataProvider<T extends AbstractRecipeBuilder<?>>
          * @param duration The duration to use.
          */
         public Builder builder(String id, Ingredient input, int duration) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, duration);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, duration);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -199,7 +199,7 @@ public abstract class BotanyPotsDataProvider<T extends AbstractRecipeBuilder<?>>
          * @param display The {@link DisplayState} to use.
          */
         public Builder builder(String id, Ingredient input, DisplayState display) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, display);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, display);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {

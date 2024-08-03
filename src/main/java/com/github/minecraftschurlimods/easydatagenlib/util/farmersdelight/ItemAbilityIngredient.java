@@ -4,22 +4,22 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.neoforged.neoforge.common.ToolAction;
+import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
-public final class ToolActionIngredient implements ICustomIngredient {
-    private final ToolAction toolAction;
+public final class ItemAbilityIngredient implements ICustomIngredient {
+    private final ItemAbility toolAction;
 
-    public ToolActionIngredient(ToolAction toolAction) {
+    public ItemAbilityIngredient(ItemAbility toolAction) {
         this.toolAction = toolAction;
     }
 
-    public static Ingredient of(ToolAction toolAction) {
-        return new Ingredient(new ToolActionIngredient(toolAction));
+    public static Ingredient of(ItemAbility toolAction) {
+        return new Ingredient(new ItemAbilityIngredient(toolAction));
     }
 
     @Override

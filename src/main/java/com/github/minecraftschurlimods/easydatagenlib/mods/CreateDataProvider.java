@@ -10,8 +10,8 @@ import com.github.minecraftschurlimods.easydatagenlib.util.create.HeatRequiremen
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.data.PackOutput;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -23,7 +23,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
     protected CreateDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(new ResourceLocation("create", folder), namespace, output, registries);
+        super(ResourceLocation.fromNamespaceAndPath("create", folder), namespace, output, registries);
     }
 
     public static class Compacting extends Processing {
@@ -83,10 +83,10 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
          * @param id    The recipe id to use.
          * @param item  The id of the output item to use.
          * @param count The output count to use.
-         * @param tag   The output NBT tag to use.
+         * @param patch The output components to use.
          */
-        public Builder builder(String id, ResourceLocation item, int count, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), item, count, tag);
+        public Builder builder(String id, ResourceLocation item, int count, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), item, count, patch);
         }
 
         /**
@@ -95,7 +95,7 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
          * @param count The output count to use.
          */
         public Builder builder(String id, ResourceLocation item, int count) {
-            return new Builder(this, new ResourceLocation(namespace, id), item, count);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), item, count);
         }
 
         /**
@@ -103,17 +103,17 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
          * @param item The id of the output item to use.
          */
         public Builder builder(String id, ResourceLocation item) {
-            return new Builder(this, new ResourceLocation(namespace, id), item);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), item);
         }
 
         /**
          * @param id    The recipe id to use.
          * @param item  The output item to use.
          * @param count The output count to use.
-         * @param tag   The output NBT tag to use.
+         * @param patch The output components to use.
          */
-        public Builder builder(String id, Item item, int count, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), item, count, tag);
+        public Builder builder(String id, Item item, int count, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), item, count, patch);
         }
 
         /**
@@ -122,7 +122,7 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
          * @param count The output count to use.
          */
         public Builder builder(String id, Item item, int count) {
-            return new Builder(this, new ResourceLocation(namespace, id), item, count);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), item, count);
         }
 
         /**
@@ -130,7 +130,7 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
          * @param item The output item to use.
          */
         public Builder builder(String id, Item item) {
-            return new Builder(this, new ResourceLocation(namespace, id), item);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), item);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -139,29 +139,29 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
             private final PotentiallyAbsentItemStack output;
             private boolean acceptMirrored = true;
 
-            protected Builder(MechanicalCrafting provider, ResourceLocation id, ResourceLocation item, int count, CompoundTag tag) {
+            protected Builder(MechanicalCrafting provider, ResourceLocation id, ResourceLocation item, int count, DataComponentPatch patch) {
                 super(id, provider);
-                output = new PotentiallyAbsentItemStack(item, count, tag);
+                output = new PotentiallyAbsentItemStack(item, count, patch);
             }
 
             protected Builder(MechanicalCrafting provider, ResourceLocation id, ResourceLocation item, int count) {
-                this(provider, id, item, count, new CompoundTag());
+                this(provider, id, item, count, DataComponentPatch.EMPTY);
             }
 
             protected Builder(MechanicalCrafting provider, ResourceLocation id, ResourceLocation item) {
-                this(provider, id, item, 1, new CompoundTag());
+                this(provider, id, item, 1, DataComponentPatch.EMPTY);
             }
 
-            protected Builder(MechanicalCrafting provider, ResourceLocation id, Item item, int count, CompoundTag tag) {
-                this(provider, id, itemId(item), count, tag);
+            protected Builder(MechanicalCrafting provider, ResourceLocation id, Item item, int count, DataComponentPatch patch) {
+                this(provider, id, itemId(item), count, patch);
             }
 
             protected Builder(MechanicalCrafting provider, ResourceLocation id, Item item, int count) {
-                this(provider, id, item, count, new CompoundTag());
+                this(provider, id, item, count, DataComponentPatch.EMPTY);
             }
 
             protected Builder(MechanicalCrafting provider, ResourceLocation id, Item item) {
-                this(provider, id, item, 1, new CompoundTag());
+                this(provider, id, item, 1, DataComponentPatch.EMPTY);
             }
 
             /**
@@ -259,7 +259,7 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
          * @param transitionalItem The id of the transitional item to use.
          */
         public Builder builder(String id, Ingredient input, ResourceLocation transitionalItem) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, transitionalItem);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, transitionalItem);
         }
 
         /**
@@ -268,7 +268,7 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
          * @param transitionalItem The transitional item to use.
          */
         public Builder builder(String id, Ingredient input, Item transitionalItem) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, transitionalItem);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, transitionalItem);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -371,7 +371,7 @@ public abstract class CreateDataProvider<T extends AbstractRecipeBuilder<?>> ext
          * @param duration The duration of this recipe.
          */
         public Builder builder(String id, int duration) {
-            return new Builder(this, new ResourceLocation(namespace, id), duration);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), duration);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {

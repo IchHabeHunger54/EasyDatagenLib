@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class ArsNouveauDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
     protected ArsNouveauDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(new ResourceLocation("ars_nouveau", folder), namespace, output, registries);
+        super(ResourceLocation.fromNamespaceAndPath("ars_nouveau", folder), namespace, output, registries);
     }
 
     public static class Crushing extends ArsNouveauDataProvider<Crushing.Builder> {
@@ -31,7 +31,7 @@ public abstract class ArsNouveauDataProvider<T extends AbstractRecipeBuilder<?>>
          * @param input The input item to use.
          */
         public Builder builder(String id, Ingredient input) {
-            return new Builder(this, new ResourceLocation(namespace, id), input);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -164,7 +164,7 @@ public abstract class ArsNouveauDataProvider<T extends AbstractRecipeBuilder<?>>
          * @param count The output count to use.
          */
         public Builder builder(String id, ResourceLocation item, int count) {
-            return new Builder(this, new ResourceLocation(namespace, id), item, count);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), item, count);
         }
 
         /**
@@ -172,7 +172,7 @@ public abstract class ArsNouveauDataProvider<T extends AbstractRecipeBuilder<?>>
          * @param item The id of the output item to use.
          */
         public Builder builder(String id, ResourceLocation item) {
-            return new Builder(this, new ResourceLocation(namespace, id), item);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), item);
         }
 
         /**
@@ -181,7 +181,7 @@ public abstract class ArsNouveauDataProvider<T extends AbstractRecipeBuilder<?>>
          * @param count The output count to use.
          */
         public Builder builder(String id, Item item, int count) {
-            return new Builder(this, new ResourceLocation(namespace, id), item, count);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), item, count);
         }
 
         /**
@@ -189,7 +189,7 @@ public abstract class ArsNouveauDataProvider<T extends AbstractRecipeBuilder<?>>
          * @param item The output item to use.
          */
         public Builder builder(String id, Item item) {
-            return new Builder(this, new ResourceLocation(namespace, id), item);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), item);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -259,7 +259,7 @@ public abstract class ArsNouveauDataProvider<T extends AbstractRecipeBuilder<?>>
          * @param mana   The amount of mana to use.
          */
         public Builder builder(String id, Ingredient input, ResourceLocation output, int count, int mana) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, count, mana);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, count, mana);
         }
 
         /**
@@ -269,7 +269,7 @@ public abstract class ArsNouveauDataProvider<T extends AbstractRecipeBuilder<?>>
          * @param mana   The amount of mana to use.
          */
         public Builder builder(String id, Ingredient input, ResourceLocation output, int mana) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, mana);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, mana);
         }
 
         /**
@@ -280,7 +280,7 @@ public abstract class ArsNouveauDataProvider<T extends AbstractRecipeBuilder<?>>
          * @param mana   The amount of mana to use.
          */
         public Builder builder(String id, Ingredient input, Item output, int count, int mana) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, count, mana);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, count, mana);
         }
 
         /**
@@ -290,7 +290,7 @@ public abstract class ArsNouveauDataProvider<T extends AbstractRecipeBuilder<?>>
          * @param mana   The amount of mana to use.
          */
         public Builder builder(String id, Ingredient input, Item output, int mana) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, mana);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, mana);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {

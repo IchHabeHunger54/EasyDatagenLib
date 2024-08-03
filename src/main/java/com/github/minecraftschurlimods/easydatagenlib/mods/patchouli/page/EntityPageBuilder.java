@@ -17,7 +17,7 @@ public class EntityPageBuilder extends AbstractPageBuilder<EntityPageBuilder> {
     private String text;
 
     public EntityPageBuilder(String entity, EntryBuilder<?,?,?> entryBuilder) {
-        super(new ResourceLocation("patchouli", "entity"), entryBuilder);
+        super(ResourceLocation.fromNamespaceAndPath("patchouli", "entity"), entryBuilder);
         this.entity = entity;
     }
 

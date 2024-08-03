@@ -7,8 +7,8 @@ import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItem
 import com.github.minecraftschurlimods.easydatagenlib.util.mekanism.*;
 import com.google.gson.JsonObject;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.data.PackOutput;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
     protected MekanismDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(new ResourceLocation("mekanism", folder), namespace, output, registries);
+        super(ResourceLocation.fromNamespaceAndPath("mekanism", folder), namespace, output, registries);
     }
     //TODO Chemical Infusing, Compressing, Crystallizing, Dissolution, Energy Conversion, Evaporating, Injecting, Metallurgic Infusing, Nucleosynthesizing, Painting, Pigment Mixing, Purifying, Reaction, Rotary, Separating, Washing
 
@@ -46,10 +46,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param extraCount  The extra input ingredient count to use.
          * @param output      The id of the output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, int extraCount, ResourceLocation output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, extraInput, extraCount, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, int extraCount, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, extraInput, extraCount, output, outputCount, patch);
         }
 
         /**
@@ -62,7 +62,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, int extraCount, ResourceLocation output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, extraInput, extraCount, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, extraInput, extraCount, output, outputCount);
         }
 
         /**
@@ -74,7 +74,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output     The id of the output item to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, int extraCount, ResourceLocation output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, extraInput, extraCount, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, extraInput, extraCount, output);
         }
 
         /**
@@ -85,10 +85,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param extraCount  The extra input ingredient count to use.
          * @param output      The id of the output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, int extraCount, Item output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, extraInput, extraCount, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, int extraCount, Item output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, extraInput, extraCount, output, outputCount, patch);
         }
 
         /**
@@ -101,7 +101,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, int extraCount, Item output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, extraInput, extraCount, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, extraInput, extraCount, output, outputCount);
         }
 
         /**
@@ -113,7 +113,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output     The id of the output item to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, int extraCount, Item output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, extraInput, extraCount, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, extraInput, extraCount, output);
         }
 
         /**
@@ -123,10 +123,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param extraCount  The extra input ingredient count to use.
          * @param output      The id of the output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, Ingredient extraInput, int extraCount, ResourceLocation output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, extraInput, extraCount, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, Ingredient extraInput, int extraCount, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, extraInput, extraCount, output, outputCount, patch);
         }
 
         /**
@@ -138,7 +138,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, Ingredient extraInput, int extraCount, ResourceLocation output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, extraInput, extraCount, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, extraInput, extraCount, output, outputCount);
         }
 
         /**
@@ -149,7 +149,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output     The id of the output item to use.
          */
         public Builder builder(String id, Ingredient input, Ingredient extraInput, int extraCount, ResourceLocation output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, extraInput, extraCount, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, extraInput, extraCount, output);
         }
 
         /**
@@ -159,10 +159,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param extraCount  The extra input ingredient count to use.
          * @param output      The output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, Ingredient extraInput, int extraCount, Item output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, extraInput, extraCount, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, Ingredient extraInput, int extraCount, Item output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, extraInput, extraCount, output, outputCount, patch);
         }
 
         /**
@@ -174,7 +174,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, Ingredient extraInput, int extraCount, Item output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, extraInput, extraCount, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, extraInput, extraCount, output, outputCount);
         }
 
         /**
@@ -185,7 +185,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output     The output item to use.
          */
         public Builder builder(String id, Ingredient input, Ingredient extraInput, int extraCount, Item output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, extraInput, extraCount, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, extraInput, extraCount, output);
         }
 
         /**
@@ -195,10 +195,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param extraInput  The extra input ingredient to use.
          * @param output      The id of the output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, ResourceLocation output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, extraInput, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, extraInput, output, outputCount, patch);
         }
 
         /**
@@ -210,7 +210,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, ResourceLocation output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, extraInput, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, extraInput, output, outputCount);
         }
 
         /**
@@ -221,7 +221,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output     The id of the output item to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, ResourceLocation output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, extraInput, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, extraInput, output);
         }
 
         /**
@@ -231,10 +231,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param extraInput  The extra input ingredient to use.
          * @param output      The id of the output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, Item output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, extraInput, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, Item output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, extraInput, output, outputCount, patch);
         }
 
         /**
@@ -246,7 +246,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, Item output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, extraInput, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, extraInput, output, outputCount);
         }
 
         /**
@@ -257,7 +257,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output     The id of the output item to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, Ingredient extraInput, Item output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, extraInput, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, extraInput, output);
         }
 
         /**
@@ -266,10 +266,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param extraInput  The extra input ingredient to use.
          * @param output      The id of the output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, Ingredient extraInput, ResourceLocation output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, extraInput, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, Ingredient extraInput, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, extraInput, output, outputCount, patch);
         }
 
         /**
@@ -280,7 +280,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, Ingredient extraInput, ResourceLocation output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, extraInput, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, extraInput, output, outputCount);
         }
 
         /**
@@ -290,7 +290,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output     The id of the output item to use.
          */
         public Builder builder(String id, Ingredient input, Ingredient extraInput, ResourceLocation output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, extraInput, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, extraInput, output);
         }
 
         /**
@@ -299,10 +299,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param extraInput  The extra input ingredient to use.
          * @param output      The output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, Ingredient extraInput, Item output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, extraInput, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, Ingredient extraInput, Item output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, extraInput, output, outputCount, patch);
         }
 
         /**
@@ -313,7 +313,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, Ingredient extraInput, Item output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, extraInput, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, extraInput, output, outputCount);
         }
 
         /**
@@ -323,14 +323,14 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output     The output item to use.
          */
         public Builder builder(String id, Ingredient input, Ingredient extraInput, Item output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, extraInput, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, extraInput, output);
         }
 
         public static class Builder extends IngredientToItemRecipe.Builder {
             private final IngredientWithAmount extraInput;
 
-            protected Builder(Combining provider, ResourceLocation id, Ingredient input, int inputCount, Ingredient extraInput, int extraCount, ResourceLocation output, int outputCount, CompoundTag tag) {
-                super(provider, id, input, inputCount, output, outputCount, tag);
+            protected Builder(Combining provider, ResourceLocation id, Ingredient input, int inputCount, Ingredient extraInput, int extraCount, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+                super(provider, id, input, inputCount, output, outputCount, patch);
                 this.extraInput = new IngredientWithAmount(extraInput, extraCount);
             }
 
@@ -344,8 +344,8 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
                 this.extraInput = new IngredientWithAmount(extraInput, extraCount);
             }
 
-            protected Builder(Combining provider, ResourceLocation id, Ingredient input, int inputCount, Ingredient extraInput, int extraCount, Item output, int outputCount, CompoundTag tag) {
-                super(provider, id, input, inputCount, output, outputCount, tag);
+            protected Builder(Combining provider, ResourceLocation id, Ingredient input, int inputCount, Ingredient extraInput, int extraCount, Item output, int outputCount, DataComponentPatch patch) {
+                super(provider, id, input, inputCount, output, outputCount, patch);
                 this.extraInput = new IngredientWithAmount(extraInput, extraCount);
             }
 
@@ -359,8 +359,8 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
                 this.extraInput = new IngredientWithAmount(extraInput, extraCount);
             }
 
-            protected Builder(Combining provider, ResourceLocation id, Ingredient input, Ingredient extraInput, int extraCount, ResourceLocation output, int outputCount, CompoundTag tag) {
-                super(provider, id, input, output, outputCount, tag);
+            protected Builder(Combining provider, ResourceLocation id, Ingredient input, Ingredient extraInput, int extraCount, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+                super(provider, id, input, output, outputCount, patch);
                 this.extraInput = new IngredientWithAmount(extraInput, extraCount);
             }
 
@@ -374,8 +374,8 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
                 this.extraInput = new IngredientWithAmount(extraInput, extraCount);
             }
 
-            protected Builder(Combining provider, ResourceLocation id, Ingredient input, Ingredient extraInput, int extraCount, Item output, int outputCount, CompoundTag tag) {
-                super(provider, id, input, output, outputCount, tag);
+            protected Builder(Combining provider, ResourceLocation id, Ingredient input, Ingredient extraInput, int extraCount, Item output, int outputCount, DataComponentPatch patch) {
+                super(provider, id, input, output, outputCount, patch);
                 this.extraInput = new IngredientWithAmount(extraInput, extraCount);
             }
 
@@ -389,8 +389,8 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
                 this.extraInput = new IngredientWithAmount(extraInput, extraCount);
             }
 
-            protected Builder(Combining provider, ResourceLocation id, Ingredient input, int inputCount, Ingredient extraInput, ResourceLocation output, int outputCount, CompoundTag tag) {
-                this(provider, id, input, inputCount, extraInput, 1, output, outputCount, tag);
+            protected Builder(Combining provider, ResourceLocation id, Ingredient input, int inputCount, Ingredient extraInput, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+                this(provider, id, input, inputCount, extraInput, 1, output, outputCount, patch);
             }
 
             protected Builder(Combining provider, ResourceLocation id, Ingredient input, int inputCount, Ingredient extraInput, ResourceLocation output, int outputCount) {
@@ -401,8 +401,8 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
                 this(provider, id, input, inputCount, extraInput, 1, output);
             }
 
-            protected Builder(Combining provider, ResourceLocation id, Ingredient input, int inputCount, Ingredient extraInput, Item output, int outputCount, CompoundTag tag) {
-                this(provider, id, input, inputCount, extraInput, 1, output, outputCount, tag);
+            protected Builder(Combining provider, ResourceLocation id, Ingredient input, int inputCount, Ingredient extraInput, Item output, int outputCount, DataComponentPatch patch) {
+                this(provider, id, input, inputCount, extraInput, 1, output, outputCount, patch);
             }
 
             protected Builder(Combining provider, ResourceLocation id, Ingredient input, int inputCount, Ingredient extraInput, Item output, int outputCount) {
@@ -413,8 +413,8 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
                 this(provider, id, input, inputCount, extraInput, 1, output);
             }
 
-            protected Builder(Combining provider, ResourceLocation id, Ingredient input, Ingredient extraInput, ResourceLocation output, int outputCount, CompoundTag tag) {
-                this(provider, id, input, extraInput, 1, output, outputCount, tag);
+            protected Builder(Combining provider, ResourceLocation id, Ingredient input, Ingredient extraInput, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+                this(provider, id, input, extraInput, 1, output, outputCount, patch);
             }
 
             protected Builder(Combining provider, ResourceLocation id, Ingredient input, Ingredient extraInput, ResourceLocation output, int outputCount) {
@@ -425,8 +425,8 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
                 this(provider, id, input, extraInput, 1, output);
             }
 
-            protected Builder(Combining provider, ResourceLocation id, Ingredient input, Ingredient extraInput, Item output, int outputCount, CompoundTag tag) {
-                this(provider, id, input, extraInput, 1, output, outputCount, tag);
+            protected Builder(Combining provider, ResourceLocation id, Ingredient input, Ingredient extraInput, Item output, int outputCount, DataComponentPatch patch) {
+                this(provider, id, input, extraInput, 1, output, outputCount, patch);
             }
 
             protected Builder(Combining provider, ResourceLocation id, Ingredient input, Ingredient extraInput, Item output, int outputCount) {
@@ -493,10 +493,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param inputCount  The input ingredient count to use.
          * @param output      The id of the output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, int inputCount, ResourceLocation output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, int inputCount, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, output, outputCount, patch);
         }
 
         /**
@@ -507,7 +507,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, ResourceLocation output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, output, outputCount);
         }
 
         /**
@@ -517,7 +517,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output     The id of the output item to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, ResourceLocation output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, output);
         }
 
         /**
@@ -526,10 +526,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param inputCount  The input ingredient count to use.
          * @param output      The output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, int inputCount, Item output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, int inputCount, Item output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, output, outputCount, patch);
         }
 
         /**
@@ -540,7 +540,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, Item output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, output, outputCount);
         }
 
         /**
@@ -550,7 +550,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output     The output item to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, Item output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, output);
         }
 
         /**
@@ -558,10 +558,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param input       The input ingredient to use.
          * @param output      The id of the output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, ResourceLocation output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, outputCount, patch);
         }
 
         /**
@@ -571,7 +571,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, ResourceLocation output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, outputCount);
         }
 
         /**
@@ -580,7 +580,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output The id of the output item to use.
          */
         public Builder builder(String id, Ingredient input, ResourceLocation output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output);
         }
 
         /**
@@ -588,10 +588,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param input       The input ingredient to use.
          * @param output      The output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, Item output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, Item output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, outputCount, patch);
         }
 
         /**
@@ -601,7 +601,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, Item output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, outputCount);
         }
 
         /**
@@ -610,55 +610,55 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output The output item to use.
          */
         public Builder builder(String id, Ingredient input, Item output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output);
         }
 
         public static class Builder extends IngredientToItemRecipe.Builder {
             private PotentiallyAbsentItemStack secondaryOutput = null;
             private float chance = 1;
 
-            protected Builder(Sawing provider, ResourceLocation id, Ingredient input, int inputCount, ResourceLocation output, int outputCount, CompoundTag tag) {
-                super(provider, id, input, inputCount, output, outputCount, tag);
+            protected Builder(Sawing provider, ResourceLocation id, Ingredient input, int inputCount, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+                super(provider, id, input, inputCount, output, outputCount, patch);
             }
 
             protected Builder(Sawing provider, ResourceLocation id, Ingredient input, int inputCount, ResourceLocation output, int outputCount) {
-                this(provider, id, input, inputCount, output, outputCount, new CompoundTag());
+                this(provider, id, input, inputCount, output, outputCount, DataComponentPatch.EMPTY);
             }
 
             protected Builder(Sawing provider, ResourceLocation id, Ingredient input, int inputCount, ResourceLocation output) {
                 this(provider, id, input, inputCount, output, 1);
             }
 
-            protected Builder(Sawing provider, ResourceLocation id, Ingredient input, int inputCount, Item output, int outputCount, CompoundTag tag) {
-                this(provider, id, input, inputCount, itemId(output), outputCount, tag);
+            protected Builder(Sawing provider, ResourceLocation id, Ingredient input, int inputCount, Item output, int outputCount, DataComponentPatch patch) {
+                this(provider, id, input, inputCount, itemId(output), outputCount, patch);
             }
 
             protected Builder(Sawing provider, ResourceLocation id, Ingredient input, int inputCount, Item output, int outputCount) {
-                this(provider, id, input, inputCount, output, outputCount, new CompoundTag());
+                this(provider, id, input, inputCount, output, outputCount, DataComponentPatch.EMPTY);
             }
 
             protected Builder(Sawing provider, ResourceLocation id, Ingredient input, int inputCount, Item output) {
                 this(provider, id, input, inputCount, output, 1);
             }
 
-            protected Builder(Sawing provider, ResourceLocation id, Ingredient input, ResourceLocation output, int outputCount, CompoundTag tag) {
-                this(provider, id, input, 1, output, outputCount, tag);
+            protected Builder(Sawing provider, ResourceLocation id, Ingredient input, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+                this(provider, id, input, 1, output, outputCount, patch);
             }
 
             protected Builder(Sawing provider, ResourceLocation id, Ingredient input, ResourceLocation output, int outputCount) {
-                this(provider, id, input, output, outputCount, new CompoundTag());
+                this(provider, id, input, output, outputCount, DataComponentPatch.EMPTY);
             }
 
             protected Builder(Sawing provider, ResourceLocation id, Ingredient input, ResourceLocation output) {
                 this(provider, id, input, output, 1);
             }
 
-            protected Builder(Sawing provider, ResourceLocation id, Ingredient input, Item output, int outputCount, CompoundTag tag) {
-                this(provider, id, input, itemId(output), outputCount, tag);
+            protected Builder(Sawing provider, ResourceLocation id, Ingredient input, Item output, int outputCount, DataComponentPatch patch) {
+                this(provider, id, input, itemId(output), outputCount, patch);
             }
 
             protected Builder(Sawing provider, ResourceLocation id, Ingredient input, Item output, int outputCount) {
-                this(provider, id, input, output, outputCount, new CompoundTag());
+                this(provider, id, input, output, outputCount, DataComponentPatch.EMPTY);
             }
 
             protected Builder(Sawing provider, ResourceLocation id, Ingredient input, Item output) {
@@ -688,11 +688,11 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
              *
              * @param output      The id of the output item to use.
              * @param outputCount The output count to use.
-             * @param tag         The output NBT tag to use.
+             * @param patch       The output components to use.
              * @param chance      The chance that this output will be used.
              */
-            public Builder setSecondaryOutput(ResourceLocation output, int outputCount, CompoundTag tag, float chance) {
-                this.secondaryOutput = new PotentiallyAbsentItemStack(output, outputCount, tag);
+            public Builder setSecondaryOutput(ResourceLocation output, int outputCount, DataComponentPatch patch, float chance) {
+                this.secondaryOutput = new PotentiallyAbsentItemStack(output, outputCount, patch);
                 this.chance = chance;
                 return this;
             }
@@ -705,7 +705,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
              * @param chance      The chance that this output will be used.
              */
             public Builder setSecondaryOutput(ResourceLocation output, int outputCount, float chance) {
-                return setSecondaryOutput(output, outputCount, new CompoundTag(), chance);
+                return setSecondaryOutput(output, outputCount, DataComponentPatch.EMPTY, chance);
             }
 
             /**
@@ -723,10 +723,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
              *
              * @param output      The id of the output item to use.
              * @param outputCount The output count to use.
-             * @param tag         The output NBT tag to use.
+             * @param patch       The output components to use.
              */
-            public Builder setSecondaryOutput(ResourceLocation output, int outputCount, CompoundTag tag) {
-                return setSecondaryOutput(output, outputCount, tag, 1);
+            public Builder setSecondaryOutput(ResourceLocation output, int outputCount, DataComponentPatch patch) {
+                return setSecondaryOutput(output, outputCount, patch, 1);
             }
 
             /**
@@ -736,7 +736,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
              * @param outputCount The output count to use.
              */
             public Builder setSecondaryOutput(ResourceLocation output, int outputCount) {
-                return setSecondaryOutput(output, outputCount, new CompoundTag());
+                return setSecondaryOutput(output, outputCount, DataComponentPatch.EMPTY);
             }
 
             /**
@@ -744,11 +744,11 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
              *
              * @param output      The output item to use.
              * @param outputCount The output count to use.
-             * @param tag         The output NBT tag to use.
+             * @param patch       The output components to use.
              * @param chance      The chance that this output will be used.
              */
-            public Builder setSecondaryOutput(Item output, int outputCount, CompoundTag tag, float chance) {
-                return setSecondaryOutput(itemId(output), outputCount, tag, chance);
+            public Builder setSecondaryOutput(Item output, int outputCount, DataComponentPatch patch, float chance) {
+                return setSecondaryOutput(itemId(output), outputCount, patch, chance);
             }
 
             /**
@@ -759,7 +759,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
              * @param chance      The chance that this output will be used.
              */
             public Builder setSecondaryOutput(Item output, int outputCount, float chance) {
-                return setSecondaryOutput(output, outputCount, new CompoundTag(), chance);
+                return setSecondaryOutput(output, outputCount, DataComponentPatch.EMPTY, chance);
             }
 
             /**
@@ -777,10 +777,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
              *
              * @param output      The output item to use.
              * @param outputCount The output count to use.
-             * @param tag         The output NBT tag to use.
+             * @param patch       The output components to use.
              */
-            public Builder setSecondaryOutput(Item output, int outputCount, CompoundTag tag) {
-                return setSecondaryOutput(itemId(output), outputCount, tag);
+            public Builder setSecondaryOutput(Item output, int outputCount, DataComponentPatch patch) {
+                return setSecondaryOutput(itemId(output), outputCount, patch);
             }
 
             /**
@@ -790,7 +790,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
              * @param outputCount The output count to use.
              */
             public Builder setSecondaryOutput(Item output, int outputCount) {
-                return setSecondaryOutput(output, outputCount, new CompoundTag());
+                return setSecondaryOutput(output, outputCount, DataComponentPatch.EMPTY);
             }
 
             @Override
@@ -846,7 +846,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output      The output chemical to use.
          */
         public Builder<T> builder(String id, Ingredient input, int outputCount, T output) {
-            return new Builder<>(this, new ResourceLocation(namespace, id), input, outputCount, output);
+            return new Builder<>(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, outputCount, output);
         }
 
         /**
@@ -855,7 +855,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output The output chemical to use.
          */
         public Builder<T> builder(String id, Ingredient input, T output) {
-            return new Builder<>(this, new ResourceLocation(namespace, id), input, output);
+            return new Builder<>(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output);
         }
 
         public static class Builder<T extends JsonSerializable> extends Abstract1To1Recipe.Builder<IngredientWithAmount, T> {
@@ -879,10 +879,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param input       The input ingredient to use.
          * @param output      The id of the output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder<T> builder(String id, T input, ResourceLocation output, int outputCount, CompoundTag tag) {
-            return new Builder<>(this, new ResourceLocation(namespace, id), input, output, outputCount, tag);
+        public Builder<T> builder(String id, T input, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+            return new Builder<>(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, outputCount, patch);
         }
 
         /**
@@ -892,7 +892,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder<T> builder(String id, T input, ResourceLocation output, int outputCount) {
-            return new Builder<>(this, new ResourceLocation(namespace, id), input, output, outputCount);
+            return new Builder<>(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, outputCount);
         }
 
         /**
@@ -901,7 +901,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output The id of the output item to use.
          */
         public Builder<T> builder(String id, T input, ResourceLocation output) {
-            return new Builder<>(this, new ResourceLocation(namespace, id), input, output);
+            return new Builder<>(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output);
         }
 
         /**
@@ -909,10 +909,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param input       The input ingredient to use.
          * @param output      The output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder<T> builder(String id, T input, Item output, int outputCount, CompoundTag tag) {
-            return new Builder<>(this, new ResourceLocation(namespace, id), input, output, outputCount, tag);
+        public Builder<T> builder(String id, T input, Item output, int outputCount, DataComponentPatch patch) {
+            return new Builder<>(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, outputCount, patch);
         }
 
         /**
@@ -922,7 +922,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder<T> builder(String id, T input, Item output, int outputCount) {
-            return new Builder<>(this, new ResourceLocation(namespace, id), input, output, outputCount);
+            return new Builder<>(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, outputCount);
         }
 
         /**
@@ -931,28 +931,28 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output The output item to use.
          */
         public Builder<T> builder(String id, T input, Item output) {
-            return new Builder<>(this, new ResourceLocation(namespace, id), input, output);
+            return new Builder<>(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output);
         }
 
         public static class Builder<T extends JsonSerializable> extends Abstract1To1Recipe.Builder<T, PotentiallyAbsentItemStack> {
-            protected Builder(TToItemRecipe<T> provider, ResourceLocation id, T input, ResourceLocation output, int outputCount, CompoundTag tag) {
-                super((Abstract1To1Recipe<T, PotentiallyAbsentItemStack, Abstract1To1Recipe.Builder<T, PotentiallyAbsentItemStack>>) (Object) provider, id, input, new PotentiallyAbsentItemStack(output, outputCount, tag));
+            protected Builder(TToItemRecipe<T> provider, ResourceLocation id, T input, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+                super((Abstract1To1Recipe<T, PotentiallyAbsentItemStack, Abstract1To1Recipe.Builder<T, PotentiallyAbsentItemStack>>) (Object) provider, id, input, new PotentiallyAbsentItemStack(output, outputCount, patch));
             }
 
             protected Builder(TToItemRecipe<T> provider, ResourceLocation id, T input, ResourceLocation output, int outputCount) {
-                this(provider, id, input, output, outputCount, new CompoundTag());
+                this(provider, id, input, output, outputCount, DataComponentPatch.EMPTY);
             }
 
             protected Builder(TToItemRecipe<T> provider, ResourceLocation id, T input, ResourceLocation output) {
                 this(provider, id, input, output, 1);
             }
 
-            protected Builder(TToItemRecipe<T> provider, ResourceLocation id, T input, Item output, int outputCount, CompoundTag tag) {
-                this(provider, id, input, itemId(output), outputCount, tag);
+            protected Builder(TToItemRecipe<T> provider, ResourceLocation id, T input, Item output, int outputCount, DataComponentPatch patch) {
+                this(provider, id, input, itemId(output), outputCount, patch);
             }
 
             protected Builder(TToItemRecipe<T> provider, ResourceLocation id, T input, Item output, int outputCount) {
-                this(provider, id, input, output, outputCount, new CompoundTag());
+                this(provider, id, input, output, outputCount, DataComponentPatch.EMPTY);
             }
 
             protected Builder(TToItemRecipe<T> provider, ResourceLocation id, T input, Item output) {
@@ -972,10 +972,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param inputCount  The input ingredient count to use.
          * @param output      The id of the output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, int inputCount, ResourceLocation output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, int inputCount, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, output, outputCount, patch);
         }
 
         /**
@@ -986,7 +986,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, ResourceLocation output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, output, outputCount);
         }
 
         /**
@@ -996,7 +996,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output     The id of the output item to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, ResourceLocation output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, output);
         }
 
         /**
@@ -1005,10 +1005,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param inputCount  The input ingredient count to use.
          * @param output      The id of the output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, int inputCount, Item output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, int inputCount, Item output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, output, outputCount, patch);
         }
 
         /**
@@ -1019,7 +1019,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, Item output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, output, outputCount);
         }
 
         /**
@@ -1029,7 +1029,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output     The id of the output item to use.
          */
         public Builder builder(String id, Ingredient input, int inputCount, Item output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, inputCount, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, inputCount, output);
         }
 
         /**
@@ -1037,10 +1037,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param input       The input ingredient to use.
          * @param output      The id of the output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, ResourceLocation output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, outputCount, patch);
         }
 
         /**
@@ -1050,7 +1050,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, ResourceLocation output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, outputCount);
         }
 
         /**
@@ -1059,7 +1059,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output The id of the output item to use.
          */
         public Builder builder(String id, Ingredient input, ResourceLocation output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output);
         }
 
         /**
@@ -1067,10 +1067,10 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param input       The input ingredient to use.
          * @param output      The output item to use.
          * @param outputCount The output count to use.
-         * @param tag         The output NBT tag to use.
+         * @param patch       The output components to use.
          */
-        public Builder builder(String id, Ingredient input, Item output, int outputCount, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, outputCount, tag);
+        public Builder builder(String id, Ingredient input, Item output, int outputCount, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, outputCount, patch);
         }
 
         /**
@@ -1080,7 +1080,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param outputCount The output count to use.
          */
         public Builder builder(String id, Ingredient input, Item output, int outputCount) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, outputCount);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, outputCount);
         }
 
         /**
@@ -1089,52 +1089,52 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output The output item to use.
          */
         public Builder builder(String id, Ingredient input, Item output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output);
         }
 
         public static class Builder extends Abstract1To1Recipe.Builder<IngredientWithAmount, PotentiallyAbsentItemStack> {
-            protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, int inputCount, ResourceLocation output, int outputCount, CompoundTag tag) {
-                super((Abstract1To1Recipe<IngredientWithAmount, PotentiallyAbsentItemStack, Abstract1To1Recipe.Builder<IngredientWithAmount, PotentiallyAbsentItemStack>>) (Object) provider, id, new IngredientWithAmount(input, inputCount), new PotentiallyAbsentItemStack(output, outputCount, tag));
+            protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, int inputCount, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+                super((Abstract1To1Recipe<IngredientWithAmount, PotentiallyAbsentItemStack, Abstract1To1Recipe.Builder<IngredientWithAmount, PotentiallyAbsentItemStack>>) (Object) provider, id, new IngredientWithAmount(input, inputCount), new PotentiallyAbsentItemStack(output, outputCount, patch));
             }
 
             protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, int inputCount, ResourceLocation output, int outputCount) {
-                this(provider, id, input, inputCount, output, outputCount, new CompoundTag());
+                this(provider, id, input, inputCount, output, outputCount, DataComponentPatch.EMPTY);
             }
 
             protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, int inputCount, ResourceLocation output) {
                 this(provider, id, input, inputCount, output, 1);
             }
 
-            protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, int inputCount, Item output, int outputCount, CompoundTag tag) {
-                this(provider, id, input, inputCount, itemId(output), outputCount, tag);
+            protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, int inputCount, Item output, int outputCount, DataComponentPatch patch) {
+                this(provider, id, input, inputCount, itemId(output), outputCount, patch);
             }
 
             protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, int inputCount, Item output, int outputCount) {
-                this(provider, id, input, inputCount, output, outputCount, new CompoundTag());
+                this(provider, id, input, inputCount, output, outputCount, DataComponentPatch.EMPTY);
             }
 
             protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, int inputCount, Item output) {
                 this(provider, id, input, inputCount, output, 1);
             }
 
-            protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, ResourceLocation output, int outputCount, CompoundTag tag) {
-                this(provider, id, input, 1, output, outputCount, tag);
+            protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, ResourceLocation output, int outputCount, DataComponentPatch patch) {
+                this(provider, id, input, 1, output, outputCount, patch);
             }
 
             protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, ResourceLocation output, int outputCount) {
-                this(provider, id, input, output, outputCount, new CompoundTag());
+                this(provider, id, input, output, outputCount, DataComponentPatch.EMPTY);
             }
 
             protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, ResourceLocation output) {
                 this(provider, id, input, output, 1);
             }
 
-            protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, Item output, int outputCount, CompoundTag tag) {
-                this(provider, id, input, itemId(output), outputCount, tag);
+            protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, Item output, int outputCount, DataComponentPatch patch) {
+                this(provider, id, input, itemId(output), outputCount, patch);
             }
 
             protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, Item output, int outputCount) {
-                this(provider, id, input, output, outputCount, new CompoundTag());
+                this(provider, id, input, output, outputCount, DataComponentPatch.EMPTY);
             }
 
             protected Builder(IngredientToItemRecipe provider, ResourceLocation id, Ingredient input, Item output) {
@@ -1154,7 +1154,7 @@ public abstract class MekanismDataProvider<T extends AbstractRecipeBuilder<?>> e
          * @param output The output gas stack to use.
          */
         public Builder builder(String id, Chemical.Stack<Gas> input, Chemical.Stack<Gas> output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output);
         }
 
         public static class Builder extends Abstract1To1Recipe.Builder<Chemical.Stack<Gas>, Chemical.Stack<Gas>> {

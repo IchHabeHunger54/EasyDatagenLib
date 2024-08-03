@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class OccultismDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
     protected OccultismDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(new ResourceLocation("occultism", folder), namespace, output, registries);
+        super(ResourceLocation.fromNamespaceAndPath("occultism", folder), namespace, output, registries);
     }
     //TODO Miner, Ritual, Spirit Fire, Spirit Trade
 
@@ -29,7 +29,7 @@ public abstract class OccultismDataProvider<T extends AbstractRecipeBuilder<?>> 
          * @param count  The output count to use.
          */
         public Builder builder(String id, Ingredient input, Ingredient output, int count) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, count);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, count);
         }
 
         /**
@@ -38,7 +38,7 @@ public abstract class OccultismDataProvider<T extends AbstractRecipeBuilder<?>> 
          * @param output The output ingredient to use.
          */
         public Builder builder(String id, Ingredient input, Ingredient output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {

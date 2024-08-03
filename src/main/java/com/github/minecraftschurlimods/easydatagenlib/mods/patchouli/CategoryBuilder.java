@@ -22,7 +22,7 @@ public abstract class CategoryBuilder<B extends BookBuilder<B, C, E>, C extends 
 
     protected CategoryBuilder(String id, String name, String description, String icon, B bookBuilder) {
         this.bookBuilder = bookBuilder;
-        this.id = new ResourceLocation(bookBuilder.getId().getNamespace(), id);
+        this.id = ResourceLocation.fromNamespaceAndPath(bookBuilder.getId().getNamespace(), id);
         this.name = name;
         this.description = description;
         this.icon = icon;

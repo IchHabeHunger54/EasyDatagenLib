@@ -6,8 +6,8 @@ import com.github.minecraftschurlimods.easydatagenlib.util.JsonUtil;
 import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItemStack;
 import com.google.gson.JsonObject;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.data.PackOutput;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class ElementalcraftDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
     protected ElementalcraftDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(new ResourceLocation("elementalcraft", folder), namespace, output, registries);
+        super(ResourceLocation.fromNamespaceAndPath("elementalcraft", folder), namespace, output, registries);
     }
     //TODO Binding, Crystallization, Infusion, Inscription, Pure Infusion, Spell Craft
 
@@ -42,12 +42,12 @@ public abstract class ElementalcraftDataProvider<T extends AbstractRecipeBuilder
          * @param input         The input ingredient to use.
          * @param output        The id of the output item to use.
          * @param count         The output count to use.
-         * @param tag           The output NBT tag to use.
+         * @param patch         The output components to use.
          * @param elementAmount The element amount to use.
          * @param luckRatio     The luck ratio to use.
          */
-        public Builder builder(String id, Ingredient input, ResourceLocation output, int count, CompoundTag tag, int elementAmount, int luckRatio) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, count, tag, elementAmount, luckRatio);
+        public Builder builder(String id, Ingredient input, ResourceLocation output, int count, DataComponentPatch patch, int elementAmount, int luckRatio) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, count, patch, elementAmount, luckRatio);
         }
 
         /**
@@ -59,7 +59,7 @@ public abstract class ElementalcraftDataProvider<T extends AbstractRecipeBuilder
          * @param luckRatio     The luck ratio to use.
          */
         public Builder builder(String id, Ingredient input, ResourceLocation output, int count, int elementAmount, int luckRatio) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, count, new CompoundTag(), elementAmount, luckRatio);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, count, DataComponentPatch.EMPTY, elementAmount, luckRatio);
         }
 
         /**
@@ -70,7 +70,7 @@ public abstract class ElementalcraftDataProvider<T extends AbstractRecipeBuilder
          * @param luckRatio     The luck ratio to use.
          */
         public Builder builder(String id, Ingredient input, ResourceLocation output, int elementAmount, int luckRatio) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, 1, elementAmount, luckRatio);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, 1, elementAmount, luckRatio);
         }
 
         /**
@@ -78,12 +78,12 @@ public abstract class ElementalcraftDataProvider<T extends AbstractRecipeBuilder
          * @param input         The input ingredient to use.
          * @param output        The output item to use.
          * @param count         The output count to use.
-         * @param tag           The output NBT tag to use.
+         * @param patch         The output components to use.
          * @param elementAmount The element amount to use.
          * @param luckRatio     The luck ratio to use.
          */
-        public Builder builder(String id, Ingredient input, Item output, int count, CompoundTag tag, int elementAmount, int luckRatio) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, itemId(output), count, tag, elementAmount, luckRatio);
+        public Builder builder(String id, Ingredient input, Item output, int count, DataComponentPatch patch, int elementAmount, int luckRatio) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, itemId(output), count, patch, elementAmount, luckRatio);
         }
 
         /**
@@ -95,7 +95,7 @@ public abstract class ElementalcraftDataProvider<T extends AbstractRecipeBuilder
          * @param luckRatio     The luck ratio to use.
          */
         public Builder builder(String id, Ingredient input, Item output, int count, int elementAmount, int luckRatio) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, count, new CompoundTag(), elementAmount, luckRatio);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, count, DataComponentPatch.EMPTY, elementAmount, luckRatio);
         }
 
         /**
@@ -106,7 +106,7 @@ public abstract class ElementalcraftDataProvider<T extends AbstractRecipeBuilder
          * @param luckRatio     The luck ratio to use.
          */
         public Builder builder(String id, Ingredient input, Item output, int elementAmount, int luckRatio) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, 1, elementAmount, luckRatio);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, 1, elementAmount, luckRatio);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -115,28 +115,28 @@ public abstract class ElementalcraftDataProvider<T extends AbstractRecipeBuilder
             private final int elementAmount;
             private final int luckRatio;
 
-            protected Builder(IO provider, ResourceLocation id, Ingredient input, ResourceLocation output, int count, CompoundTag tag, int elementAmount, int luckRatio) {
+            protected Builder(IO provider, ResourceLocation id, Ingredient input, ResourceLocation output, int count, DataComponentPatch patch, int elementAmount, int luckRatio) {
                 super(id, provider);
                 this.input = input;
-                this.output = new PotentiallyAbsentItemStack(output, count, tag);
+                this.output = new PotentiallyAbsentItemStack(output, count, patch);
                 this.elementAmount = elementAmount;
                 this.luckRatio = luckRatio;
             }
 
             protected Builder(IO provider, ResourceLocation id, Ingredient input, ResourceLocation output, int count, int elementAmount, int luckRatio) {
-                this(provider, id, input, output, count, new CompoundTag(), elementAmount, luckRatio);
+                this(provider, id, input, output, count, DataComponentPatch.EMPTY, elementAmount, luckRatio);
             }
 
             protected Builder(IO provider, ResourceLocation id, Ingredient input, ResourceLocation output, int elementAmount, int luckRatio) {
                 this(provider, id, input, output, 1, elementAmount, luckRatio);
             }
 
-            protected Builder(IO provider, ResourceLocation id, Ingredient input, Item output, int count, CompoundTag tag, int elementAmount, int luckRatio) {
-                this(provider, id, input, itemId(output), count, tag, elementAmount, luckRatio);
+            protected Builder(IO provider, ResourceLocation id, Ingredient input, Item output, int count, DataComponentPatch patch, int elementAmount, int luckRatio) {
+                this(provider, id, input, itemId(output), count, patch, elementAmount, luckRatio);
             }
 
             protected Builder(IO provider, ResourceLocation id, Ingredient input, Item output, int count, int elementAmount, int luckRatio) {
-                this(provider, id, input, output, count, new CompoundTag(), elementAmount, luckRatio);
+                this(provider, id, input, output, count, DataComponentPatch.EMPTY, elementAmount, luckRatio);
             }
 
             protected Builder(IO provider, ResourceLocation id, Ingredient input, Item output, int elementAmount, int luckRatio) {

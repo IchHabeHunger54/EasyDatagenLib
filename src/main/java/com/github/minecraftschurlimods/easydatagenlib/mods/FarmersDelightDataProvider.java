@@ -6,8 +6,8 @@ import com.github.minecraftschurlimods.easydatagenlib.util.JsonUtil;
 import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItemStack;
 import com.google.gson.JsonObject;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.data.PackOutput;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class FarmersDelightDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
     protected FarmersDelightDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(new ResourceLocation("farmersdelight", folder), namespace, output, registries);
+        super(ResourceLocation.fromNamespaceAndPath("farmersdelight", folder), namespace, output, registries);
     }
 
     public static class Cooking extends FarmersDelightDataProvider<Cooking.Builder> {
@@ -34,7 +34,7 @@ public abstract class FarmersDelightDataProvider<T extends AbstractRecipeBuilder
          * @param count      The output count to use.
          */
         public Builder builder(String id, int duration, float experience, ResourceLocation output, int count) {
-            return new Builder(this, new ResourceLocation(namespace, id), duration, experience, output, count);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), duration, experience, output, count);
         }
 
         /**
@@ -44,7 +44,7 @@ public abstract class FarmersDelightDataProvider<T extends AbstractRecipeBuilder
          * @param output     The id of the output item to use.
          */
         public Builder builder(String id, int duration, float experience, ResourceLocation output) {
-            return new Builder(this, new ResourceLocation(namespace, id), duration, experience, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), duration, experience, output);
         }
 
         /**
@@ -55,7 +55,7 @@ public abstract class FarmersDelightDataProvider<T extends AbstractRecipeBuilder
          * @param count      The output count to use.
          */
         public Builder builder(String id, int duration, float experience, Item output, int count) {
-            return new Builder(this, new ResourceLocation(namespace, id), duration, experience, output, count);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), duration, experience, output, count);
         }
 
         /**
@@ -65,7 +65,7 @@ public abstract class FarmersDelightDataProvider<T extends AbstractRecipeBuilder
          * @param output     The output item to use.
          */
         public Builder builder(String id, int duration, float experience, Item output) {
-            return new Builder(this, new ResourceLocation(namespace, id), duration, experience, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), duration, experience, output);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -161,7 +161,7 @@ public abstract class FarmersDelightDataProvider<T extends AbstractRecipeBuilder
          * @param tool  The tool to use.
          */
         public Builder builder(String id, Ingredient input, Ingredient tool) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, tool);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, tool);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -191,11 +191,11 @@ public abstract class FarmersDelightDataProvider<T extends AbstractRecipeBuilder
              *
              * @param item   The id of the output item to use.
              * @param count  The output count to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch  The output components to use.
              * @param chance The chance that this output will be used.
              */
-            public Builder addOutput(ResourceLocation item, int count, CompoundTag tag, float chance) {
-                outputs.add(new PotentiallyAbsentItemStack.WithChance(item, count, tag, chance));
+            public Builder addOutput(ResourceLocation item, int count, DataComponentPatch patch, float chance) {
+                outputs.add(new PotentiallyAbsentItemStack.WithChance(item, count, patch, chance));
                 return this;
             }
 
@@ -204,10 +204,10 @@ public abstract class FarmersDelightDataProvider<T extends AbstractRecipeBuilder
              *
              * @param item  The id of the output item to use.
              * @param count The output count to use.
-             * @param tag   The output NBT tag to use.
+             * @param patch The output components to use.
              */
-            public Builder addOutput(ResourceLocation item, int count, CompoundTag tag) {
-                return addOutput(item, count, tag, 1);
+            public Builder addOutput(ResourceLocation item, int count, DataComponentPatch patch) {
+                return addOutput(item, count, patch, 1);
             }
 
             /**
@@ -217,7 +217,7 @@ public abstract class FarmersDelightDataProvider<T extends AbstractRecipeBuilder
              * @param count The output count to use.
              */
             public Builder addOutput(ResourceLocation item, int count) {
-                return addOutput(item, count, new CompoundTag());
+                return addOutput(item, count, DataComponentPatch.EMPTY);
             }
 
             /**
@@ -234,11 +234,11 @@ public abstract class FarmersDelightDataProvider<T extends AbstractRecipeBuilder
              *
              * @param item   The item to use.
              * @param count  The output count to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch  The output components to use.
              * @param chance The chance that this output will be used.
              */
-            public Builder addOutput(Item item, int count, CompoundTag tag, float chance) {
-                return addOutput(itemId(item), count, tag, chance);
+            public Builder addOutput(Item item, int count, DataComponentPatch patch, float chance) {
+                return addOutput(itemId(item), count, patch, chance);
             }
 
             /**
@@ -246,10 +246,10 @@ public abstract class FarmersDelightDataProvider<T extends AbstractRecipeBuilder
              *
              * @param item  The item to use.
              * @param count The output count to use.
-             * @param tag   The output NBT tag to use.
+             * @param patch The output components to use.
              */
-            public Builder addOutput(Item item, int count, CompoundTag tag) {
-                return addOutput(item, count, tag, 1);
+            public Builder addOutput(Item item, int count, DataComponentPatch patch) {
+                return addOutput(item, count, patch, 1);
             }
 
             /**
@@ -259,7 +259,7 @@ public abstract class FarmersDelightDataProvider<T extends AbstractRecipeBuilder
              * @param count The output count to use.
              */
             public Builder addOutput(Item item, int count) {
-                return addOutput(item, count, new CompoundTag());
+                return addOutput(item, count, DataComponentPatch.EMPTY);
             }
 
             /**

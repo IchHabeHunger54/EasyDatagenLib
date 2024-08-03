@@ -31,7 +31,7 @@ public abstract class EntryBuilder<B extends BookBuilder<B, C, E>, C extends Cat
     private Map<ItemStack, Integer> extraRecipeMappings;
 
     protected EntryBuilder(String id, String name, String icon, C parent) {
-        this.id = new ResourceLocation(parent.getId().getNamespace(), parent.getId().getPath() + "/" + id);
+        this.id = parent.getId().withSuffix("/" + id);
         this.name = name;
         this.category = parent.getId();
         this.icon = icon;
@@ -174,7 +174,7 @@ public abstract class EntryBuilder<B extends BookBuilder<B, C, E>, C extends Cat
     }
 
     public RecipePageBuilder addRecipePage(String type, ResourceLocation recipe) {
-        return this.addPage(new RecipePageBuilder(new ResourceLocation("patchouli", type), recipe, this));
+        return this.addPage(new RecipePageBuilder(ResourceLocation.fromNamespaceAndPath("patchouli", type), recipe, this));
     }
 
     public EntityPageBuilder addEntityPage(String entity) {

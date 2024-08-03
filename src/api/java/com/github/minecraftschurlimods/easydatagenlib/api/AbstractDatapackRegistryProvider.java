@@ -87,7 +87,7 @@ public abstract class AbstractDatapackRegistryProvider<T> {
      * @return The {@link Holder} for the given {@link ResourceKey}.
      */
     protected final <S> Holder.Reference<S> holder(ResourceKey<? extends Registry<S>> registryKey, String name) {
-        return holder(registryKey, new ResourceLocation(namespace, name));
+        return holder(registryKey, ResourceLocation.fromNamespaceAndPath(namespace, name));
     }
 
     /**
@@ -118,7 +118,7 @@ public abstract class AbstractDatapackRegistryProvider<T> {
      * @return The {@link Holder} for the given {@link ResourceLocation}.
      */
     protected final Holder.Reference<T> ownHolder(String name) {
-        return ownHolder(new ResourceLocation(namespace, name));
+        return ownHolder(ResourceLocation.fromNamespaceAndPath(namespace, name));
     }
 
     /**
@@ -140,7 +140,7 @@ public abstract class AbstractDatapackRegistryProvider<T> {
      * @param value The value.
      */
     protected final void add(String name, T value) {
-        add(new ResourceLocation(namespace, name), value);
+        add(ResourceLocation.fromNamespaceAndPath(namespace, name), value);
     }
 
     /**

@@ -6,8 +6,8 @@ import com.github.minecraftschurlimods.easydatagenlib.util.JsonUtil;
 import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItemStack;
 import com.google.gson.JsonObject;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.data.PackOutput;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class BotaniaDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
     protected BotaniaDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(new ResourceLocation("botania", folder), namespace, output, registries);
+        super(ResourceLocation.fromNamespaceAndPath("botania", folder), namespace, output, registries);
     }
     //TODO Brew, Elven Trade, Orechid, Orechid Ignem, Petal Apothecary, Pure Daisy, Runic Altar, Terra Plate
 
@@ -32,10 +32,10 @@ public abstract class BotaniaDataProvider<T extends AbstractRecipeBuilder<?>> ex
          * @param input  The input ingredient to use.
          * @param output The id of the output item to use.
          * @param count  The output count to use.
-         * @param tag    The output tag to use.
+         * @param patch  The output components to use.
          */
-        public Builder builder(String id, int mana, Ingredient input, ResourceLocation output, int count, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), mana, input, output, count, tag);
+        public Builder builder(String id, int mana, Ingredient input, ResourceLocation output, int count, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), mana, input, output, count, patch);
         }
 
         /**
@@ -46,7 +46,7 @@ public abstract class BotaniaDataProvider<T extends AbstractRecipeBuilder<?>> ex
          * @param count  The output count to use.
          */
         public Builder builder(String id, int mana, Ingredient input, ResourceLocation output, int count) {
-            return new Builder(this, new ResourceLocation(namespace, id), mana, input, output, count);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), mana, input, output, count);
         }
 
         /**
@@ -56,7 +56,7 @@ public abstract class BotaniaDataProvider<T extends AbstractRecipeBuilder<?>> ex
          * @param output The id of the output item to use.
          */
         public Builder builder(String id, int mana, Ingredient input, ResourceLocation output) {
-            return new Builder(this, new ResourceLocation(namespace, id), mana, input, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), mana, input, output);
         }
 
         /**
@@ -65,10 +65,10 @@ public abstract class BotaniaDataProvider<T extends AbstractRecipeBuilder<?>> ex
          * @param input  The input ingredient to use.
          * @param output The output item to use.
          * @param count  The output count to use.
-         * @param tag    The output tag to use.
+         * @param patch  The output components to use.
          */
-        public Builder builder(String id, int mana, Ingredient input, Item output, int count, CompoundTag tag) {
-            return new Builder(this, new ResourceLocation(namespace, id), mana, input, output, count, tag);
+        public Builder builder(String id, int mana, Ingredient input, Item output, int count, DataComponentPatch patch) {
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), mana, input, output, count, patch);
         }
 
         /**
@@ -79,7 +79,7 @@ public abstract class BotaniaDataProvider<T extends AbstractRecipeBuilder<?>> ex
          * @param count  The output count to use.
          */
         public Builder builder(String id, int mana, Ingredient input, Item output, int count) {
-            return new Builder(this, new ResourceLocation(namespace, id), mana, input, output, count);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), mana, input, output, count);
         }
 
         /**
@@ -89,7 +89,7 @@ public abstract class BotaniaDataProvider<T extends AbstractRecipeBuilder<?>> ex
          * @param output The output item to use.
          */
         public Builder builder(String id, int mana, Ingredient input, Item output) {
-            return new Builder(this, new ResourceLocation(namespace, id), mana, input, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), mana, input, output);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -99,27 +99,27 @@ public abstract class BotaniaDataProvider<T extends AbstractRecipeBuilder<?>> ex
             private String group;
             private ResourceLocation catalyst;
 
-            protected Builder(Infusing provider, ResourceLocation id, int mana, Ingredient input, ResourceLocation output, int count, CompoundTag tag) {
+            protected Builder(Infusing provider, ResourceLocation id, int mana, Ingredient input, ResourceLocation output, int count, DataComponentPatch patch) {
                 super(id, provider);
                 this.mana = mana;
                 this.input = input;
-                this.output = new PotentiallyAbsentItemStack(output, count, tag);
+                this.output = new PotentiallyAbsentItemStack(output, count, patch);
             }
 
             protected Builder(Infusing provider, ResourceLocation id, int mana, Ingredient input, ResourceLocation output, int count) {
-                this(provider, id, mana, input, output, count, new CompoundTag());
+                this(provider, id, mana, input, output, count, DataComponentPatch.EMPTY);
             }
 
             protected Builder(Infusing provider, ResourceLocation id, int mana, Ingredient input, ResourceLocation output) {
                 this(provider, id, mana, input, output, 1);
             }
 
-            protected Builder(Infusing provider, ResourceLocation id, int mana, Ingredient input, Item output, int count, CompoundTag tag) {
-                this(provider, id, mana, input, itemId(output), count, tag);
+            protected Builder(Infusing provider, ResourceLocation id, int mana, Ingredient input, Item output, int count, DataComponentPatch patch) {
+                this(provider, id, mana, input, itemId(output), count, patch);
             }
 
             protected Builder(Infusing provider, ResourceLocation id, int mana, Ingredient input, Item output, int count) {
-                this(provider, id, mana, input, output, count, new CompoundTag());
+                this(provider, id, mana, input, output, count, DataComponentPatch.EMPTY);
             }
 
             protected Builder(Infusing provider, ResourceLocation id, int mana, Ingredient input, Item output) {

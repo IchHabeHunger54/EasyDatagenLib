@@ -1,6 +1,6 @@
 package com.github.minecraftschurlimods.easydatagenlib.util;
 
-import com.github.minecraftschurlimods.easydatagenlib.util.farmersdelight.ToolActionIngredient;
+import com.github.minecraftschurlimods.easydatagenlib.util.farmersdelight.ItemAbilityIngredient;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -142,8 +142,8 @@ public class JsonUtil {
         if (ingredient.getCustomIngredient() instanceof PotentiallyAbsentIngredient potentiallyAbsentIngredient) {
             return potentiallyAbsentIngredient.toJson();
         }
-        if (ingredient.getCustomIngredient() instanceof ToolActionIngredient toolActionIngredient) {
-            return toolActionIngredient.toJson();
+        if (ingredient.getCustomIngredient() instanceof ItemAbilityIngredient itemAbilityIngredient) {
+            return itemAbilityIngredient.toJson();
         }
         return Ingredient.CODEC.encodeStart(registries.createSerializationContext(JsonOps.INSTANCE), ingredient).getOrThrow();
     }

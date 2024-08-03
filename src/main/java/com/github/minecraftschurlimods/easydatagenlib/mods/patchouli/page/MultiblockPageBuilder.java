@@ -11,7 +11,7 @@ public class MultiblockPageBuilder extends AbstractPageBuilder<MultiblockPageBui
     private       String text;
 
     public MultiblockPageBuilder(String name, ResourceLocation multiblock, EntryBuilder<?, ?, ?> parent) {
-        super(new ResourceLocation("patchouli", "multiblock"), parent);
+        super(ResourceLocation.fromNamespaceAndPath("patchouli", "multiblock"), parent);
         this.name = name;
         this.multiblock = multiblock;
     }

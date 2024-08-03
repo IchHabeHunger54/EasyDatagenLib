@@ -14,7 +14,7 @@ public class SpotlightPageBuilder extends AbstractPageBuilder<SpotlightPageBuild
     private String text;
 
     public SpotlightPageBuilder(ItemStack stack, EntryBuilder<?,?,?> parent) {
-        super(new ResourceLocation("patchouli", "spotlight"), parent);
+        super(ResourceLocation.fromNamespaceAndPath("patchouli", "spotlight"), parent);
         this.item = Util.serializeStack(stack, parent.getParent().getBookBuilder().getRegistries());
     }
 

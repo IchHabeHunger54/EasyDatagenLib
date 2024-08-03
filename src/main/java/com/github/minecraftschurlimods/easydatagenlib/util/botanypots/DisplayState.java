@@ -26,7 +26,7 @@ public abstract class DisplayState implements JsonSerializable {
     }
 
     public static class Aging extends DisplayState {
-        private static final ResourceLocation ID = new ResourceLocation("botanypots", "aging");
+        private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("botanypots", "aging");
         private final ResourceLocation block;
 
         /**
@@ -54,7 +54,7 @@ public abstract class DisplayState implements JsonSerializable {
     }
 
     public static class Simple extends DisplayState {
-        private static final ResourceLocation ID = new ResourceLocation("botanypots", "simple");
+        private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("botanypots", "simple");
         private final List<AxisAlignedRotation> rotation = new ArrayList<>();
         private final BlockState state;
         private Vec3 scale = null;
@@ -125,7 +125,7 @@ public abstract class DisplayState implements JsonSerializable {
     }
 
     public static class Transitional extends DisplayState {
-        private static final ResourceLocation ID = new ResourceLocation("botanypots", "transitional");
+        private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("botanypots", "transitional");
         private final List<DisplayState> phases = new ArrayList<>();
 
         public Transitional() {

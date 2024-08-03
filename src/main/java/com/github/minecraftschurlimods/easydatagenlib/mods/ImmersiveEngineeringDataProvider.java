@@ -21,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
     protected ImmersiveEngineeringDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(new ResourceLocation("immersiveengineering", folder), namespace, output, registries);
+        super(ResourceLocation.fromNamespaceAndPath("immersiveengineering", folder), namespace, output, registries);
     }
     //TODO Alloy Furnace, Blast Furnace, Blast Furnace Fuel, Bottling Machine, Cloche Fertilizer, Coke Oven, Fermenter, Generator Fuel, Metal Press, Mineral Mix, Mixer, Refinery, Squeezer, Thermoelectric Source
 
@@ -38,7 +38,7 @@ public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeB
          * @param count    The input count to use.
          */
         public Builder builder(String id, int duration, int energy, Ingredient input, int count) {
-            return new Builder(this, new ResourceLocation(namespace, id), duration, energy, input, count);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), duration, energy, input, count);
         }
 
         /**
@@ -48,7 +48,7 @@ public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeB
          * @param input    The input ingredient to use.
          */
         public Builder builder(String id, int duration, int energy, Ingredient input) {
-            return new Builder(this, new ResourceLocation(namespace, id), duration, energy, input);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), duration, energy, input);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -206,7 +206,7 @@ public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeB
          * @param block      The id of the block to use in the recipe renderer.
          */
         public Builder builder(String id, int time, Ingredient input, Ingredient soil, ClocheRenderType renderType, ResourceLocation block) {
-            return new Builder(this, new ResourceLocation(namespace, id), time, input, soil, renderType, block);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), time, input, soil, renderType, block);
         }
 
         /**
@@ -218,7 +218,7 @@ public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeB
          * @param block      The block to use in the recipe renderer.
          */
         public Builder builder(String id, int time, Ingredient input, Ingredient soil, ClocheRenderType renderType, Block block) {
-            return new Builder(this, new ResourceLocation(namespace, id), time, input, soil, renderType, block);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), time, input, soil, renderType, block);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -289,7 +289,7 @@ public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeB
          * @param count  The output count to use.
          */
         public Builder builder(String id, int energy, Ingredient input, Ingredient output, int count) {
-            return new Builder(this, new ResourceLocation(namespace, id), energy, input, output, count);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), energy, input, output, count);
         }
 
         /**
@@ -299,7 +299,7 @@ public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeB
          * @param output The output ingredient to use.
          */
         public Builder builder(String id, int energy, Ingredient input, Ingredient output) {
-            return new Builder(this, new ResourceLocation(namespace, id), energy, input, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), energy, input, output);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -383,7 +383,7 @@ public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeB
          * @param count  The output count to use.
          */
         public Builder builder(String id, int energy, Ingredient input, ResourceLocation output, int count) {
-            return new Builder(this, new ResourceLocation(namespace, id), energy, input, output, count);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), energy, input, output, count);
         }
 
         /**
@@ -393,7 +393,7 @@ public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeB
          * @param output The id of the output item to use.
          */
         public Builder builder(String id, int energy, Ingredient input, ResourceLocation output) {
-            return new Builder(this, new ResourceLocation(namespace, id), energy, input, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), energy, input, output);
         }
 
         /**
@@ -404,7 +404,7 @@ public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeB
          * @param count  The output count to use.
          */
         public Builder builder(String id, int energy, Ingredient input, Item output, int count) {
-            return new Builder(this, new ResourceLocation(namespace, id), energy, input, output, count);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), energy, input, output, count);
         }
 
         /**
@@ -414,7 +414,7 @@ public abstract class ImmersiveEngineeringDataProvider<T extends AbstractRecipeB
          * @param output The output item to use.
          */
         public Builder builder(String id, int energy, Ingredient input, Item output) {
-            return new Builder(this, new ResourceLocation(namespace, id), energy, input, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), energy, input, output);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {

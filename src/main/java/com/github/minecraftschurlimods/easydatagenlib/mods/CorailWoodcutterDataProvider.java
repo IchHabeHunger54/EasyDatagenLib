@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class CorailWoodcutterDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
     protected CorailWoodcutterDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(new ResourceLocation("corail_woodcutter", folder), namespace, output, registries);
+        super(ResourceLocation.fromNamespaceAndPath("corail_woodcutter", folder), namespace, output, registries);
     }
 
     public static class Sawing extends CorailWoodcutterDataProvider<Sawing.Builder> {
@@ -30,7 +30,7 @@ public abstract class CorailWoodcutterDataProvider<T extends AbstractRecipeBuild
          * @param count  The output count to use.
          */
         public Builder builder(String id, Ingredient input, ResourceLocation output, int count) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, count);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, count);
         }
 
         /**
@@ -39,7 +39,7 @@ public abstract class CorailWoodcutterDataProvider<T extends AbstractRecipeBuild
          * @param output The id of the output item to use.
          */
         public Builder builder(String id, Ingredient input, ResourceLocation output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output);
         }
 
         /**
@@ -49,7 +49,7 @@ public abstract class CorailWoodcutterDataProvider<T extends AbstractRecipeBuild
          * @param count  The output count to use.
          */
         public Builder builder(String id, Ingredient input, Item output, int count) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output, count);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output, count);
         }
 
         /**
@@ -58,7 +58,7 @@ public abstract class CorailWoodcutterDataProvider<T extends AbstractRecipeBuild
          * @param output The output item to use.
          */
         public Builder builder(String id, Ingredient input, Item output) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, output);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, output);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {

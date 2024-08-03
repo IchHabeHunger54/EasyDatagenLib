@@ -65,12 +65,12 @@ public abstract class PatchouliBookProvider implements DataProvider {
     protected abstract void addBooks(HolderLookup.Provider lookupProvider, Consumer<BookBuilder<?,?,?>> consumer);
 
     private CompletableFuture<?> saveEntry(CachedOutput cache, JsonObject json, ResourceLocation bookId, ResourceLocation id, String locale) {
-        Path outputPath = this.bookContentPathProvider.json(new ResourceLocation(bookId.getNamespace(), bookId.getPath() + "/" + locale + "/entries/" + id.getPath()));
+        Path outputPath = this.bookContentPathProvider.json(bookId.withSuffix("/" + locale + "/entries/" + id.getPath()));
         return DataProvider.saveStable(cache, json, outputPath);
     }
 
     private CompletableFuture<?> saveCategory(CachedOutput cache, JsonObject json, ResourceLocation bookId, ResourceLocation id, String locale) {
-        Path outputPath = this.bookContentPathProvider.json(new ResourceLocation(bookId.getNamespace(), bookId.getPath() + "/" + locale + "/categories/" + id.getPath()));
+        Path outputPath = this.bookContentPathProvider.json(bookId.withSuffix("/" + locale + "/categories/" + id.getPath()));
         return DataProvider.saveStable(cache, json, outputPath);
     }
 
@@ -80,11 +80,11 @@ public abstract class PatchouliBookProvider implements DataProvider {
     }
 
     public RegularBookBuilder createBookBuilder(String id, String name, String landingText, HolderLookup.Provider registries) {
-        return new RegularBookBuilder(new ResourceLocation(this.namespace, id), name, landingText, this, registries);
+        return new RegularBookBuilder(ResourceLocation.fromNamespaceAndPath(this.namespace, id), name, landingText, this, registries);
     }
 
     public TranslatedBookBuilder createBookBuilder(String id, String name, String landingText, BiConsumer<String, String> langProvider, HolderLookup.Provider registries) {
-        return new TranslatedBookBuilder(new ResourceLocation(this.namespace, id), name, landingText, langProvider, this, registries);
+        return new TranslatedBookBuilder(ResourceLocation.fromNamespaceAndPath(this.namespace, id), name, landingText, langProvider, this, registries);
     }
 
     /**

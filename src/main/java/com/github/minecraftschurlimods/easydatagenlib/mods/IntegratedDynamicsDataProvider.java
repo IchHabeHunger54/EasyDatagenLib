@@ -7,6 +7,7 @@ import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentFlui
 import com.github.minecraftschurlimods.easydatagenlib.util.PotentiallyAbsentItemStack;
 import com.google.gson.JsonObject;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -20,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
     protected IntegratedDynamicsDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(new ResourceLocation("integrateddynamics", folder), namespace, output, registries);
+        super(ResourceLocation.fromNamespaceAndPath("integrateddynamics", folder), namespace, output, registries);
     }
     //TODO Drying Basin, Mechanical Drying Basin
 
@@ -35,7 +36,7 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
          * @param duration The duration to use.
          */
         public Builder builder(String id, Ingredient input, int duration) {
-            return new Builder(this, new ResourceLocation(namespace, id), input, duration);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input, duration);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -55,10 +56,10 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              *
              * @param fluid  The id of the output fluid to use.
              * @param amount The output amount to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch The output components to use.
              */
-            public Builder setOutputFluid(ResourceLocation fluid, int amount, CompoundTag tag) {
-                this.outputFluid = new PotentiallyAbsentFluidStack(fluid, amount, tag);
+            public Builder setOutputFluid(ResourceLocation fluid, int amount, DataComponentPatch patch) {
+                this.outputFluid = new PotentiallyAbsentFluidStack(fluid, amount, patch);
                 return this;
             }
 
@@ -69,7 +70,7 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              * @param amount The output amount to use.
              */
             public Builder setOutputFluid(ResourceLocation fluid, int amount) {
-                return setOutputFluid(fluid, amount, new CompoundTag());
+                return setOutputFluid(fluid, amount, DataComponentPatch.EMPTY);
             }
 
             /**
@@ -86,10 +87,10 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              *
              * @param fluid  The output fluid to use.
              * @param amount The output amount to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch The output components to use.
              */
-            public Builder setOutputFluid(Fluid fluid, int amount, CompoundTag tag) {
-                return setOutputFluid(fluidId(fluid), amount, tag);
+            public Builder setOutputFluid(Fluid fluid, int amount, DataComponentPatch patch) {
+                return setOutputFluid(fluidId(fluid), amount, patch);
             }
 
             /**
@@ -99,7 +100,7 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              * @param amount The output amount to use.
              */
             public Builder setOutputFluid(Fluid fluid, int amount) {
-                return setOutputFluid(fluid, amount, new CompoundTag());
+                return setOutputFluid(fluid, amount, DataComponentPatch.EMPTY);
             }
 
             /**
@@ -116,11 +117,11 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              *
              * @param item   The id of the output item to use.
              * @param amount The output amount to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch The output components to use.
              * @param chance The chance that this output will be used.
              */
-            public Builder addItem(ResourceLocation item, int amount, CompoundTag tag, float chance) {
-                outputs.add(new PotentiallyAbsentItemStack.WithChance(item, amount, tag, chance));
+            public Builder addItem(ResourceLocation item, int amount, DataComponentPatch patch, float chance) {
+                outputs.add(new PotentiallyAbsentItemStack.WithChance(item, amount, patch, chance));
                 return this;
             }
 
@@ -132,7 +133,7 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              * @param chance The chance that this output will be used.
              */
             public Builder addItem(ResourceLocation item, int amount, float chance) {
-                return addItem(item, amount, new CompoundTag(), chance);
+                return addItem(item, amount, DataComponentPatch.EMPTY, chance);
             }
 
             /**
@@ -150,11 +151,11 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              *
              * @param item   The output item to use.
              * @param amount The output amount to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch The output components to use.
              * @param chance The chance that this output will be used.
              */
-            public Builder addItem(Item item, int amount, CompoundTag tag, float chance) {
-                return addItem(itemId(item), amount, tag, chance);
+            public Builder addItem(Item item, int amount, DataComponentPatch patch, float chance) {
+                return addItem(itemId(item), amount, patch, chance);
             }
 
             /**
@@ -165,7 +166,7 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              * @param chance The chance that this output will be used.
              */
             public Builder addItem(Item item, int amount, float chance) {
-                return addItem(item, amount, new CompoundTag(), chance);
+                return addItem(item, amount, DataComponentPatch.EMPTY, chance);
             }
 
             /**
@@ -183,10 +184,10 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              *
              * @param item   The id of the output item to use.
              * @param amount The output amount to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch The output components to use.
              */
-            public Builder addItem(ResourceLocation item, int amount, CompoundTag tag) {
-                return addItem(item, amount, tag, 1);
+            public Builder addItem(ResourceLocation item, int amount, DataComponentPatch patch) {
+                return addItem(item, amount, patch, 1);
             }
 
             /**
@@ -196,7 +197,7 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              * @param amount The output amount to use.
              */
             public Builder addItem(ResourceLocation item, int amount) {
-                return addItem(item, amount, new CompoundTag());
+                return addItem(item, amount, DataComponentPatch.EMPTY);
             }
 
             /**
@@ -213,10 +214,10 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              *
              * @param item   The output item to use.
              * @param amount The output amount to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch The output components to use.
              */
-            public Builder addItem(Item item, int amount, CompoundTag tag) {
-                return addItem(itemId(item), amount, tag);
+            public Builder addItem(Item item, int amount, DataComponentPatch patch) {
+                return addItem(itemId(item), amount, patch);
             }
 
             /**
@@ -226,7 +227,7 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              * @param amount The output amount to use.
              */
             public Builder addItem(Item item, int amount) {
-                return addItem(item, amount, new CompoundTag());
+                return addItem(item, amount, DataComponentPatch.EMPTY);
             }
 
             /**
@@ -262,7 +263,7 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
          * @param input The input ingredient to use.
          */
         public Builder builder(String id, Ingredient input) {
-            return new Builder(this, new ResourceLocation(namespace, id), input);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), input);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -280,10 +281,10 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              *
              * @param fluid  The id of the output fluid to use.
              * @param amount The output amount to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch The output components to use.
              */
-            public Builder setOutputFluid(ResourceLocation fluid, int amount, CompoundTag tag) {
-                this.outputFluid = new PotentiallyAbsentFluidStack(fluid, amount, tag);
+            public Builder setOutputFluid(ResourceLocation fluid, int amount, DataComponentPatch patch) {
+                this.outputFluid = new PotentiallyAbsentFluidStack(fluid, amount, patch);
                 return this;
             }
 
@@ -294,7 +295,7 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              * @param amount The output amount to use.
              */
             public Builder setOutputFluid(ResourceLocation fluid, int amount) {
-                return setOutputFluid(fluid, amount, new CompoundTag());
+                return setOutputFluid(fluid, amount, DataComponentPatch.EMPTY);
             }
 
             /**
@@ -311,10 +312,10 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              *
              * @param fluid  The output fluid to use.
              * @param amount The output amount to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch The output components to use.
              */
-            public Builder setOutputFluid(Fluid fluid, int amount, CompoundTag tag) {
-                return setOutputFluid(fluidId(fluid), amount, tag);
+            public Builder setOutputFluid(Fluid fluid, int amount, DataComponentPatch patch) {
+                return setOutputFluid(fluidId(fluid), amount, patch);
             }
 
             /**
@@ -324,7 +325,7 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              * @param amount The output amount to use.
              */
             public Builder setOutputFluid(Fluid fluid, int amount) {
-                return setOutputFluid(fluid, amount, new CompoundTag());
+                return setOutputFluid(fluid, amount, DataComponentPatch.EMPTY);
             }
 
             /**
@@ -341,11 +342,11 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              *
              * @param item   The id of the output item to use.
              * @param amount The output amount to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch The output components to use.
              * @param chance The chance that this output will be used.
              */
-            public Builder addItem(ResourceLocation item, int amount, CompoundTag tag, float chance) {
-                outputs.add(new PotentiallyAbsentItemStack.WithChance(item, amount, tag, chance));
+            public Builder addItem(ResourceLocation item, int amount, DataComponentPatch patch, float chance) {
+                outputs.add(new PotentiallyAbsentItemStack.WithChance(item, amount, patch, chance));
                 return this;
             }
 
@@ -357,7 +358,7 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              * @param chance The chance that this output will be used.
              */
             public Builder addItem(ResourceLocation item, int amount, float chance) {
-                return addItem(item, amount, new CompoundTag(), chance);
+                return addItem(item, amount, DataComponentPatch.EMPTY, chance);
             }
 
             /**
@@ -375,11 +376,11 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              *
              * @param item   The output item to use.
              * @param amount The output amount to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch The output components to use.
              * @param chance The chance that this output will be used.
              */
-            public Builder addItem(Item item, int amount, CompoundTag tag, float chance) {
-                return addItem(itemId(item), amount, tag, chance);
+            public Builder addItem(Item item, int amount, DataComponentPatch patch, float chance) {
+                return addItem(itemId(item), amount, patch, chance);
             }
 
             /**
@@ -390,7 +391,7 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              * @param chance The chance that this output will be used.
              */
             public Builder addItem(Item item, int amount, float chance) {
-                return addItem(item, amount, new CompoundTag(), chance);
+                return addItem(item, amount, DataComponentPatch.EMPTY, chance);
             }
 
             /**
@@ -408,10 +409,10 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              *
              * @param item   The id of the output item to use.
              * @param amount The output amount to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch The output components to use.
              */
-            public Builder addItem(ResourceLocation item, int amount, CompoundTag tag) {
-                return addItem(item, amount, tag, 1);
+            public Builder addItem(ResourceLocation item, int amount, DataComponentPatch patch) {
+                return addItem(item, amount, patch, 1);
             }
 
             /**
@@ -421,7 +422,7 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              * @param amount The output amount to use.
              */
             public Builder addItem(ResourceLocation item, int amount) {
-                return addItem(item, amount, new CompoundTag());
+                return addItem(item, amount, DataComponentPatch.EMPTY);
             }
 
             /**
@@ -438,10 +439,10 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              *
              * @param item   The output item to use.
              * @param amount The output amount to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch The output components to use.
              */
-            public Builder addItem(Item item, int amount, CompoundTag tag) {
-                return addItem(itemId(item), amount, tag);
+            public Builder addItem(Item item, int amount, DataComponentPatch patch) {
+                return addItem(itemId(item), amount, patch);
             }
 
             /**
@@ -451,7 +452,7 @@ public abstract class IntegratedDynamicsDataProvider<T extends AbstractRecipeBui
              * @param amount The output amount to use.
              */
             public Builder addItem(Item item, int amount) {
-                return addItem(item, amount, new CompoundTag());
+                return addItem(item, amount, DataComponentPatch.EMPTY);
             }
 
             /**

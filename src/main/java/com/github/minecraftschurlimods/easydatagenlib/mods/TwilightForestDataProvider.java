@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class TwilightForestDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
     protected TwilightForestDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(new ResourceLocation("twilightforest", folder), namespace, output, registries);
+        super(ResourceLocation.fromNamespaceAndPath("twilightforest", folder), namespace, output, registries);
     }
 
     public static class Crumbling extends TwilightForestDataProvider<Crumbling.Builder> {
@@ -29,7 +29,7 @@ public abstract class TwilightForestDataProvider<T extends AbstractRecipeBuilder
          * @param to   The id of the result block to use.
          */
         public Builder builder(String id, ResourceLocation from, ResourceLocation to) {
-            return new Builder(this, new ResourceLocation(namespace, id), from, to);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), from, to);
         }
 
         /**
@@ -38,7 +38,7 @@ public abstract class TwilightForestDataProvider<T extends AbstractRecipeBuilder
          * @param to   The result block to use.
          */
         public Builder builder(String id, ResourceLocation from, Block to) {
-            return new Builder(this, new ResourceLocation(namespace, id), from, to);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), from, to);
         }
 
         /**
@@ -47,7 +47,7 @@ public abstract class TwilightForestDataProvider<T extends AbstractRecipeBuilder
          * @param to   The id of the result block to use.
          */
         public Builder builder(String id, Block from, ResourceLocation to) {
-            return new Builder(this, new ResourceLocation(namespace, id), from, to);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), from, to);
         }
 
         /**
@@ -56,7 +56,7 @@ public abstract class TwilightForestDataProvider<T extends AbstractRecipeBuilder
          * @param to   The result block to use.
          */
         public Builder builder(String id, Block from, Block to) {
-            return new Builder(this, new ResourceLocation(namespace, id), from, to);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), from, to);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -101,7 +101,7 @@ public abstract class TwilightForestDataProvider<T extends AbstractRecipeBuilder
          * @param reversible Whether the transformation is reversible or not.
          */
         public Builder builder(String id, ResourceLocation from, ResourceLocation to, boolean reversible) {
-            return new Builder(this, new ResourceLocation(namespace, id), from, to, reversible);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), from, to, reversible);
         }
 
         /**
@@ -111,7 +111,7 @@ public abstract class TwilightForestDataProvider<T extends AbstractRecipeBuilder
          * @param reversible Whether the transformation is reversible or not.
          */
         public Builder builder(String id, ResourceLocation from, EntityType<?> to, boolean reversible) {
-            return new Builder(this, new ResourceLocation(namespace, id), from, to, reversible);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), from, to, reversible);
         }
 
         /**
@@ -121,7 +121,7 @@ public abstract class TwilightForestDataProvider<T extends AbstractRecipeBuilder
          * @param reversible Whether the transformation is reversible or not.
          */
         public Builder builder(String id, EntityType<?> from, ResourceLocation to, boolean reversible) {
-            return new Builder(this, new ResourceLocation(namespace, id), from, to, reversible);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), from, to, reversible);
         }
 
         /**
@@ -131,7 +131,7 @@ public abstract class TwilightForestDataProvider<T extends AbstractRecipeBuilder
          * @param reversible Whether the transformation is reversible or not.
          */
         public Builder builder(String id, EntityType<?> from, EntityType<?> to, boolean reversible) {
-            return new Builder(this, new ResourceLocation(namespace, id), from, to, reversible);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), from, to, reversible);
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {

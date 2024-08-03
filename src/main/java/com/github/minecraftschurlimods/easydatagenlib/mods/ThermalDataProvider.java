@@ -10,8 +10,8 @@ import com.github.minecraftschurlimods.easydatagenlib.util.thermal.IngredientWit
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.data.PackOutput;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -23,7 +23,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> extends AbstractRecipeProvider<T> {
     protected ThermalDataProvider(String folder, String namespace, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(new ResourceLocation("thermal", folder), namespace, output, registries);
+        super(ResourceLocation.fromNamespaceAndPath("thermal", folder), namespace, output, registries);
     }
     //TODO Fuels, Fisher Boost, Hive Extractor, Potion Diffuser Boost, Rock Gen Mapping, Tree Extractor Boost, Tree Extractor Mapping
 
@@ -79,14 +79,14 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
          * @param experience The amount of experience this recipe awards.
          */
         public Builder builder(String id, float experience) {
-            return new Builder(this, new ResourceLocation(namespace, id), experience);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), experience);
         }
 
         /**
          * @param id The recipe id to use.
          */
         public Builder builder(String id) {
-            return new Builder(this, new ResourceLocation(namespace, id));
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id));
         }
 
         public static class Builder extends Processing.Builder {
@@ -182,14 +182,14 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
          * @param experience The amount of experience this recipe awards.
          */
         public Builder builder(String id, float experience) {
-            return new Builder(this, new ResourceLocation(namespace, id), experience);
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id), experience);
         }
 
         /**
          * @param id The recipe id to use.
          */
         public Builder builder(String id) {
-            return new Builder(this, new ResourceLocation(namespace, id));
+            return new Builder(this, ResourceLocation.fromNamespaceAndPath(namespace, id));
         }
 
         public static class Builder extends AbstractRecipeBuilder<Builder> {
@@ -264,11 +264,11 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
              *
              * @param output The id of the output item to use.
              * @param count  The output count to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch  The output components to use.
              * @param chance The chance that this output will be used.
              */
-            public Builder addOutputItem(ResourceLocation output, int count, CompoundTag tag, float chance) {
-                outputItems.add(new PotentiallyAbsentItemStack.WithChance(output, count, tag, chance));
+            public Builder addOutputItem(ResourceLocation output, int count, DataComponentPatch patch, float chance) {
+                outputItems.add(new PotentiallyAbsentItemStack.WithChance(output, count, patch, chance));
                 return this;
             }
 
@@ -280,7 +280,7 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
              * @param chance The chance that this output will be used.
              */
             public Builder addOutputItem(ResourceLocation output, int count, float chance) {
-                return addOutputItem(output, count, new CompoundTag(), chance);
+                return addOutputItem(output, count, DataComponentPatch.EMPTY, chance);
             }
 
             /**
@@ -298,11 +298,11 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
              *
              * @param output The output item to use.
              * @param count  The output count to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch  The output components to use.
              * @param chance The chance that this output will be used.
              */
-            public Builder addOutputItem(Item output, int count, CompoundTag tag, float chance) {
-                return addOutputItem(itemId(output), count, tag, chance);
+            public Builder addOutputItem(Item output, int count, DataComponentPatch patch, float chance) {
+                return addOutputItem(itemId(output), count, patch, chance);
             }
 
             /**
@@ -313,7 +313,7 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
              * @param chance The chance that this output will be used.
              */
             public Builder addOutputItem(Item output, int count, float chance) {
-                return addOutputItem(output, count, new CompoundTag(), chance);
+                return addOutputItem(output, count, DataComponentPatch.EMPTY, chance);
             }
 
             /**
@@ -331,10 +331,10 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
              *
              * @param output The id of the output item to use.
              * @param count  The output count to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch  The output components to use.
              */
-            public Builder addOutputItem(ResourceLocation output, int count, CompoundTag tag) {
-                return addOutputItem(output, count, tag, 1f);
+            public Builder addOutputItem(ResourceLocation output, int count, DataComponentPatch patch) {
+                return addOutputItem(output, count, patch, 1f);
             }
 
             /**
@@ -361,10 +361,10 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
              *
              * @param output The output item to use.
              * @param count  The output count to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch  The output components to use.
              */
-            public Builder addOutputItem(Item output, int count, CompoundTag tag) {
-                return addOutputItem(itemId(output), count, tag, 1f);
+            public Builder addOutputItem(Item output, int count, DataComponentPatch patch) {
+                return addOutputItem(itemId(output), count, patch, 1f);
             }
 
             /**
@@ -391,10 +391,10 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
              *
              * @param output The id of the output fluid to use.
              * @param amount The output amount to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch  The output components to use.
              */
-            public Builder addOutputFluid(ResourceLocation output, int amount, CompoundTag tag) {
-                outputFluids.add(new PotentiallyAbsentFluidStack(output, amount, tag));
+            public Builder addOutputFluid(ResourceLocation output, int amount, DataComponentPatch patch) {
+                outputFluids.add(new PotentiallyAbsentFluidStack(output, amount, patch));
                 return this;
             }
 
@@ -405,7 +405,7 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
              * @param amount The output amount to use.
              */
             public Builder addOutputFluid(ResourceLocation output, int amount) {
-                return addOutputFluid(output, amount, new CompoundTag());
+                return addOutputFluid(output, amount, DataComponentPatch.EMPTY);
             }
 
             /**
@@ -422,10 +422,10 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
              *
              * @param output The output fluid to use.
              * @param amount The output amount to use.
-             * @param tag    The output NBT tag to use.
+             * @param patch  The output components to use.
              */
-            public Builder addOutputFluid(Fluid output, int amount, CompoundTag tag) {
-                return addOutputFluid(fluidId(output), amount, tag);
+            public Builder addOutputFluid(Fluid output, int amount, DataComponentPatch patch) {
+                return addOutputFluid(fluidId(output), amount, patch);
             }
 
             /**
@@ -435,7 +435,7 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
              * @param amount The output amount to use.
              */
             public Builder addOutputFluid(Fluid output, int amount) {
-                return addOutputFluid(output, amount, new CompoundTag());
+                return addOutputFluid(output, amount, DataComponentPatch.EMPTY);
             }
 
             /**
@@ -461,13 +461,13 @@ public abstract class ThermalDataProvider<T extends AbstractRecipeBuilder<?>> ex
                 JsonArray input = JsonUtil.toList(inputItems, registries);
                 for (FluidIngredient ingredient : inputFluids) {
                     JsonObject fluid = ingredient.toJson(registries);
-                    if (fluid.has("tag")) {
-                        fluid.add("fluid_tag", fluid.get("tag"));
-                        fluid.remove("tag");
+                    if (fluid.has("components")) {
+                        fluid.add("fluid_components", fluid.get("components"));
+                        fluid.remove("components");
                     }
                     input.add(fluid);
                 }
-                if (inputItems.size() == 1 && inputFluids.size() == 0) {
+                if (inputItems.size() == 1 && inputFluids.isEmpty()) {
                     json.add("ingredient", input.get(0).getAsJsonObject());
                 } else {
                     json.add("input", input);

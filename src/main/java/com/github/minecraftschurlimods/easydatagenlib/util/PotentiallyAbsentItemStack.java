@@ -1,7 +1,9 @@
 package com.github.minecraftschurlimods.easydatagenlib.util;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -15,29 +17,29 @@ import net.minecraft.world.item.ItemStack;
 public class PotentiallyAbsentItemStack implements JsonSerializable {
     public final ResourceLocation item;
     public final int count;
-    public CompoundTag tag;
+    public DataComponentPatch patch;
 
     /**
      * Creates a new instance of this class. Use this if you want the output to have additional NBT data.
      *
      * @param item  The item id to use.
      * @param count The count to use.
-     * @param tag   The NBT to use. May be null.
+     * @param patch The components to use.
      */
-    public PotentiallyAbsentItemStack(ResourceLocation item, int count, CompoundTag tag) {
+    public PotentiallyAbsentItemStack(ResourceLocation item, int count, DataComponentPatch patch) {
         this.item = item;
         this.count = count;
-        this.tag = tag;
+        this.patch = patch;
     }
 
     /**
      * Creates a new instance of this class. Use this if you want the output to have additional NBT data.
      *
      * @param item  The item id to use.
-     * @param tag   The NBT to use. May be null.
+     * @param patch The components to use.
      */
-    public PotentiallyAbsentItemStack(ResourceLocation item, CompoundTag tag) {
-        this(item, 1, tag);
+    public PotentiallyAbsentItemStack(ResourceLocation item, DataComponentPatch patch) {
+        this(item, 1, patch);
     }
 
     /**
@@ -47,7 +49,7 @@ public class PotentiallyAbsentItemStack implements JsonSerializable {
      * @param count The count to use.
      */
     public PotentiallyAbsentItemStack(ResourceLocation item, int count) {
-        this(item, count, new CompoundTag());
+        this(item, count, DataComponentPatch.EMPTY);
     }
 
     /**
@@ -56,7 +58,7 @@ public class PotentiallyAbsentItemStack implements JsonSerializable {
      * @param item The item id to use.
      */
     public PotentiallyAbsentItemStack(ResourceLocation item) {
-        this(item, 1, new CompoundTag());
+        this(item, 1, DataComponentPatch.EMPTY);
     }
 
     /**
@@ -70,8 +72,8 @@ public class PotentiallyAbsentItemStack implements JsonSerializable {
         if (count > 1) {
             json.addProperty("count", count);
         }
-        if (!tag.isEmpty()) {
-            json.addProperty("nbt", tag.toString());
+        if (!patch.isEmpty()) {
+            json.add("components", DataComponentPatch.CODEC.encodeStart(registries.createSerializationContext(JsonOps.INSTANCE), patch).getOrThrow());
         }
         return json;
     }
@@ -87,10 +89,10 @@ public class PotentiallyAbsentItemStack implements JsonSerializable {
          *
          * @param item  The item id to use.
          * @param count The count to use.
-         * @param tag   The NBT to use. May be null.
+         * @param patch The components to use.
          */
-        public WithChance(ResourceLocation item, int count, CompoundTag tag, float chance) {
-            super(item, count, tag);
+        public WithChance(ResourceLocation item, int count, DataComponentPatch patch, float chance) {
+            super(item, count, patch);
             this.chance = chance;
         }
 
@@ -98,10 +100,10 @@ public class PotentiallyAbsentItemStack implements JsonSerializable {
          * Creates a new instance of this class. Use this if you want the output to have additional NBT data.
          *
          * @param item  The item id to use.
-         * @param tag   The NBT to use. May be null.
+         * @param patch The components to use.
          */
-        public WithChance(ResourceLocation item, CompoundTag tag, float chance) {
-            this(item, 1, tag, chance);
+        public WithChance(ResourceLocation item, DataComponentPatch patch, float chance) {
+            this(item, 1, patch, chance);
         }
 
         /**
@@ -111,7 +113,7 @@ public class PotentiallyAbsentItemStack implements JsonSerializable {
          * @param count The count to use.
          */
         public WithChance(ResourceLocation item, int count, float chance) {
-            this(item, count, new CompoundTag(), chance);
+            this(item, count, DataComponentPatch.EMPTY, chance);
         }
 
         /**
@@ -120,7 +122,7 @@ public class PotentiallyAbsentItemStack implements JsonSerializable {
          * @param item The item id to use.
          */
         public WithChance(ResourceLocation item, float chance) {
-            this(item, 1, new CompoundTag(), chance);
+            this(item, 1, DataComponentPatch.EMPTY, chance);
         }
 
         @Override

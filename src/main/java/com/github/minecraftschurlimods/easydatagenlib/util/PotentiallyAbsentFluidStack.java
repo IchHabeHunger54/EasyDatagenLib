@@ -1,7 +1,9 @@
 package com.github.minecraftschurlimods.easydatagenlib.util;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -15,29 +17,29 @@ import net.neoforged.neoforge.fluids.FluidStack;
 public class PotentiallyAbsentFluidStack implements JsonSerializable {
     public final ResourceLocation fluid;
     public final int amount;
-    public CompoundTag tag;
+    public DataComponentPatch patch;
 
     /**
      * Creates a new instance of this class. Use this if you want the output to have additional NBT data.
      *
      * @param fluid  The fluid id to use.
      * @param amount The amount to use.
-     * @param tag   The NBT to use. May be null.
+     * @param patch  The output components to use.
      */
-    public PotentiallyAbsentFluidStack(ResourceLocation fluid, int amount, CompoundTag tag) {
+    public PotentiallyAbsentFluidStack(ResourceLocation fluid, int amount, DataComponentPatch patch) {
         this.fluid = fluid;
         this.amount = amount;
-        this.tag = tag;
+        this.patch = patch;
     }
 
     /**
      * Creates a new instance of this class. Use this if you want the output to have additional NBT data.
      *
-     * @param fluid  The fluid id to use.
-     * @param tag   The NBT to use. May be null.
+     * @param fluid The fluid id to use.
+     * @param patch The output components to use.
      */
-    public PotentiallyAbsentFluidStack(ResourceLocation fluid, CompoundTag tag) {
-        this(fluid, 1, tag);
+    public PotentiallyAbsentFluidStack(ResourceLocation fluid, DataComponentPatch patch) {
+        this(fluid, 1, patch);
     }
 
     /**
@@ -47,7 +49,7 @@ public class PotentiallyAbsentFluidStack implements JsonSerializable {
      * @param amount The amount to use.
      */
     public PotentiallyAbsentFluidStack(ResourceLocation fluid, int amount) {
-        this(fluid, amount, new CompoundTag());
+        this(fluid, amount, DataComponentPatch.EMPTY);
     }
 
     /**
@@ -56,7 +58,7 @@ public class PotentiallyAbsentFluidStack implements JsonSerializable {
      * @param fluid The fluid id to use.
      */
     public PotentiallyAbsentFluidStack(ResourceLocation fluid) {
-        this(fluid, 1, new CompoundTag());
+        this(fluid, 1, DataComponentPatch.EMPTY);
     }
 
     /**
@@ -68,8 +70,8 @@ public class PotentiallyAbsentFluidStack implements JsonSerializable {
         if (fluid == null) throw new IllegalArgumentException("Cannot serialize an fluid stack without an fluid id!");
         json.addProperty("fluid", fluid.toString());
         json.addProperty("amount", amount);
-        if (!tag.isEmpty()) {
-            json.addProperty("nbt", tag.toString());
+        if (!patch.isEmpty()) {
+            json.add("components", DataComponentPatch.CODEC.encodeStart(registries.createSerializationContext(JsonOps.INSTANCE), patch).getOrThrow());
         }
         return json;
     }
@@ -85,21 +87,21 @@ public class PotentiallyAbsentFluidStack implements JsonSerializable {
          *
          * @param fluid  The fluid id to use.
          * @param amount The amount to use.
-         * @param tag   The NBT to use. May be null.
+         * @param patch  The output components to use.
          */
-        public WithChance(ResourceLocation fluid, int amount, CompoundTag tag, float chance) {
-            super(fluid, amount, tag);
+        public WithChance(ResourceLocation fluid, int amount, DataComponentPatch patch, float chance) {
+            super(fluid, amount, patch);
             this.chance = chance;
         }
 
         /**
          * Creates a new instance of this class. Use this if you want the output to have additional NBT data.
          *
-         * @param fluid  The fluid id to use.
-         * @param tag   The NBT to use. May be null.
+         * @param fluid The fluid id to use.
+         * @param patch The output components to use.
          */
-        public WithChance(ResourceLocation fluid, CompoundTag tag, float chance) {
-            this(fluid, 1, tag, chance);
+        public WithChance(ResourceLocation fluid, DataComponentPatch patch, float chance) {
+            this(fluid, 1, patch, chance);
         }
 
         /**
@@ -109,7 +111,7 @@ public class PotentiallyAbsentFluidStack implements JsonSerializable {
          * @param amount The amount to use.
          */
         public WithChance(ResourceLocation fluid, int amount, float chance) {
-            this(fluid, amount, new CompoundTag(), chance);
+            this(fluid, amount, DataComponentPatch.EMPTY, chance);
         }
 
         /**
@@ -118,7 +120,7 @@ public class PotentiallyAbsentFluidStack implements JsonSerializable {
          * @param fluid The fluid id to use.
          */
         public WithChance(ResourceLocation fluid, float chance) {
-            this(fluid, 1, new CompoundTag(), chance);
+            this(fluid, 1, DataComponentPatch.EMPTY, chance);
         }
 
         @Override

@@ -101,7 +101,7 @@ public abstract class FluidIngredient implements Predicate<FluidStack>, JsonSeri
 
         @Override
         protected void read(JsonObject json, HolderLookup.Provider registries) {
-            ResourceLocation id = new ResourceLocation(GsonHelper.getAsString(json, "fluid"));
+            ResourceLocation id = ResourceLocation.parse(GsonHelper.getAsString(json, "fluid"));
             Fluid fluid = BuiltInRegistries.FLUID.get(id);
             if (fluid == Fluids.EMPTY) throw new JsonSyntaxException("Unknown fluid '" + id + "'");
             this.fluid = new FluidStack(fluid, GsonHelper.getAsInt(json, "amount"));
@@ -139,7 +139,7 @@ public abstract class FluidIngredient implements Predicate<FluidStack>, JsonSeri
 
         @Override
         protected void read(JsonObject json, HolderLookup.Provider registries) {
-            tag = FluidTags.create(new ResourceLocation(GsonHelper.getAsString(json, "fluidTag")));
+            tag = FluidTags.create(ResourceLocation.parse(GsonHelper.getAsString(json, "fluidTag")));
         }
 
         @Override
